@@ -1,5 +1,8 @@
 import { useEffect, useState } from 'react'
+import { askQuestion } from './api/chat'
+import ChatInput from './components/ChatInput'
 import EmptyState from './components/EmptyState'
+import MessageList from './components/MessageList'
 import Sidebar from './components/Sidebar'
 import type { HistoryEntry, Message } from './types/chat'
 
@@ -25,22 +28,38 @@ function App() {
     setLoading(false)
   }
 
-  const handleSuggestionClick = (question: string) => {
-    console.log('suggestion clicked - wired up to chat input in a later step', question)
+  const handleSend = async (question: string) => {
+    setMessages((prev) => [...prev, { role: 'user', content: question }])
+    setLoading(true)
+
+    try {
+      const response = await askQuestion(question, history)
+      setMessages((prev) => [
+        ...prev,
+        { role: 'assistant', content: response.answer, sources: response.sources },
+      ])
+      setHistory(response.history)
+    } catch (error) {
+      console.error('Failed to get response', error)
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
     <div style={{ display: 'flex', height: '100%' }}>
       <Sidebar theme={theme} onToggleTheme={toggleTheme} onNewChat={handleNewChat} />
-      <main style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        {messages.length === 0 ? (
-          <EmptyState onSuggestionClick={handleSuggestionClick} />
-        ) : (
-          <p style={{ color: 'var(--color-text-muted)' }}>
-            {`${messages.length} message(s), ${history.length} in history.`}
-          </p>
-        )}
-        {loading && <p style={{ color: 'var(--color-text-muted)' }}>Thinking…</p>}
+      <main style={{ flex: 1, display: 'flex', flexDirection: 'column', height: '100%', minWidth: 0 }}>
+        <div style={{ flex: 1, display: 'flex', overflow: 'hidden' }}>
+          {messages.length === 0 ? (
+            <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <EmptyState onSuggestionClick={handleSend} />
+            </div>
+          ) : (
+            <MessageList messages={messages} loading={loading} />
+          )}
+        </div>
+        <ChatInput onSend={handleSend} loading={loading} />
       </main>
     </div>
   )

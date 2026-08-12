@@ -4,14 +4,15 @@ import type { Message } from '../types/chat'
 
 interface MessageListProps {
   messages: Message[]
+  loading?: boolean
 }
 
-function MessageList({ messages }: MessageListProps) {
+function MessageList({ messages, loading = false }: MessageListProps) {
   const bottomRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
-  }, [messages])
+  }, [messages, loading])
 
   return (
     <div className="message-list">
@@ -20,6 +21,15 @@ function MessageList({ messages }: MessageListProps) {
           <div className="message-bubble">{message.content}</div>
         </div>
       ))}
+      {loading && (
+        <div className="message message-assistant">
+          <div className="message-bubble typing-indicator" aria-label="Assistant is typing">
+            <span />
+            <span />
+            <span />
+          </div>
+        </div>
+      )}
       <div ref={bottomRef} />
     </div>
   )
