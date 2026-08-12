@@ -46,10 +46,10 @@
   "skills": {
     "programming_languages": ["C", "C++", "Python", "JavaScript", "TypeScript"],
     "frameworks_libraries": ["React", "Redux Toolkit (RTK)", "HTML", "CSS", "Tailwind CSS", "Django", "FastAPI", "Flask"],
-    "genai_ml_tools": [],
+    "genai_ml_tools": ["LangChain", "RAG (Retrieval-Augmented Generation)", "Chroma (Vector Database)", "HuggingFace Embeddings", "Groq (LLM Inference)", "Gradio", "LLM-as-judge Evaluation"],
     "databases": ["PostgreSQL", "SQL", "Materialized Views", "Query Optimization & Indexing"],
     "tools_platforms": ["Git", "GitHub", "Postman", "Linux", "Celery", "Kafka", "Redis", "WebSocket"],
-    "soft_skills": []
+    "soft_skills": ["Effective Communication", "Adaptability", "Quick Learner", "Calm Under Pressure", "Self-Motivated"]
   },
 
   "experience": [
@@ -114,33 +114,62 @@
       "github_link": "https://github.com/Amansaxena16/Notification-System",
       "live_demo_link": "",
       "outcome_or_impact": ""
+    },
+    {
+      "name": "RAG_Chat_App",
+      "description": "A full-stack RAG (Retrieval-Augmented Generation) chatbot that answers company-specific questions using a custom knowledge base, with a Django REST backend and a React frontend.",
+      "problem_solved": "Demonstrates how to ground an LLM's answers in real documents instead of general knowledge, with citations back to the source and a measurable way to test answer accuracy.",
+      "tech_stack": ["Django", "Django REST Framework", "React", "Chroma", "HuggingFace Embeddings", "Groq", "Gradio"],
+      "your_role": "Solo builder — designed and built the full stack, from the ingestion and retrieval pipeline to the chat UI and the evaluation system.",
+      "key_features": [
+        "RAG pipeline that chunks and embeds a document knowledge base into a Chroma vector store, retrieves relevant context per question, and answers using an LLM.",
+        "A 30-question evaluation dataset with LLM-as-judge scoring, checking both retrieval accuracy and answer correctness across categories.",
+        "A Gradio dashboard to run the evaluation and view accuracy broken down by document category."
+      ],
+      "github_link": "https://github.com/Amansaxena16/RAG_Chat_App",
+      "live_demo_link": "",
+      "outcome_or_impact": ""
+    },
+    {
+      "name": "MyTwinAI",
+      "description": "An AI-powered personal portfolio assistant (this project) that answers questions about my background, skills, and experience by retrieving from my own profile data.",
+      "problem_solved": "Lets recruiters or visitors get accurate, specific answers about my experience instead of reading through a static resume.",
+      "tech_stack": ["Django", "Django REST Framework", "React", "Chroma", "HuggingFace Embeddings", "Groq"],
+      "your_role": "Solo builder — designing and building the full stack, reusing and adapting the RAG architecture from RAG_Chat_App.",
+      "key_features": [
+        "RAG pipeline over structured personal/profile data instead of plain documents.",
+        "Answers questions about experience, skills, projects, and FAQs a recruiter would typically ask."
+      ],
+      "github_link": "https://github.com/Amansaxena16/MyTwinAI",
+      "live_demo_link": "",
+      "outcome_or_impact": ""
     }
   ],
 
-  "certifications": [],
+  "certifications": ["GenAI Learning Course – Udemy"],
 
-  "achievements": [],
+  "achievements": ["Won 1st position in a singing competition"],
 
-  "extracurricular": [],
+  "extracurricular": ["Singing", "Playing Guitar"],
 
-  "career_goals": "",
+  "career_goals": "Over the next few years, one of my goals is to build management skills alongside my technical role, so I can grow both as an engineer and as a leader.",
 
   "faqs": [
     {
       "question": "Why should we hire you?",
-      "answer": ""
+      "answer": "I believe I'm a strong fit for development roles. I'm self-motivated and put my full effort into whatever I'm working on — that's what helped me do well academically, and it's the same mindset I bring to real projects. At Einstellen.AI, I've owned backend design across multiple microservices, built event-driven systems with Kafka, and worked on everything from access control to real-time features — both as an individual contributor and as part of a team. That mix of technical depth and adaptability is what I'd bring to any team I join."
     },
     {
       "question": "What are your strengths?",
-      "answer": ""
+      "answer": "My key strengths are effective communication and staying calm under pressure, which help me handle challenges well. I'm also a quick learner and adapt easily to new situations."
     },
     {
       "question": "What are your weaknesses?",
-      "answer": ""
+      "answer": "Sometimes I focus too much on small details, which can delay my final decision-making. I'm actively working on finding the right balance between thoroughness and speed."
     },
     {
       "question": "Where do you see yourself in 5 years?",
-      "answer": ""
+      "answer": "Over the next few years, one of my goals is to build management skills alongside my technical role, so I can grow both as an engineer and as a leader."
     }
   ]
 }
