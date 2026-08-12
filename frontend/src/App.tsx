@@ -13,6 +13,7 @@ function App() {
   const [messages, setMessages] = useState<Message[]>([])
   const [history, setHistory] = useState<HistoryEntry[]>([])
   const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme)
@@ -26,9 +27,11 @@ function App() {
     setMessages([])
     setHistory([])
     setLoading(false)
+    setError(null)
   }
 
   const handleSend = async (question: string) => {
+    setError(null)
     setMessages((prev) => [...prev, { role: 'user', content: question }])
     setLoading(true)
 
@@ -39,8 +42,9 @@ function App() {
         { role: 'assistant', content: response.answer, sources: response.sources },
       ])
       setHistory(response.history)
-    } catch (error) {
-      console.error('Failed to get response', error)
+    } catch (err) {
+      console.error('Failed to get response', err)
+      setError('Something went wrong while getting a response. Please try again.')
     } finally {
       setLoading(false)
     }
@@ -59,6 +63,18 @@ function App() {
             <MessageList messages={messages} loading={loading} />
           )}
         </div>
+        {error && (
+          <p
+            style={{
+              color: 'var(--color-danger)',
+              textAlign: 'center',
+              fontSize: 13,
+              margin: '0 24px 8px',
+            }}
+          >
+            {error}
+          </p>
+        )}
         <ChatInput onSend={handleSend} loading={loading} />
       </main>
     </div>

@@ -14,6 +14,8 @@
   --color-user-bg: #fff3e4;
   --color-user-border: #facb8d;
   --color-assistant-bg: #f8f4f4;
+
+  --color-danger: #b3261e;
 }
 
 :root[data-theme='dark'] {
@@ -29,6 +31,8 @@
   --color-user-bg: #3a2f22;
   --color-user-border: #5a3b0a;
   --color-assistant-bg: #201f1e;
+
+  --color-danger: #ff6659;
 }
 
 * {
