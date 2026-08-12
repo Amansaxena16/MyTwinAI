@@ -1,0 +1,146 @@
+{
+  "personal_info": {
+    "name": "Aman Saxena",
+    "tagline": "Full Stack Software Developer",
+    "location": "Noida, India",
+    "email": "aman16nov.as@gmail.com",
+    "phone": "8840154168",
+    "linkedin": "https://www.linkedin.com/in/aman-saxena-16nov/",
+    "github": "https://github.com/Amansaxena16",
+    "leetcode": "https://leetcode.com/u/Amansaxena16/"
+  },
+
+  "summary": "I'm a Full Stack Developer with hands-on experience building scalable, event-driven systems for AI-powered products. At Einstellen.AI, I've worked across 4 microservices, designing RBAC access control, async AI interview workflows, real-time WebSocket chat, and Kafka-based event-driven architecture, while also building the React/TypeScript frontend. I enjoy solving backend and system design problems: things like idempotent message processing, distributed rate limiting, and PostgreSQL performance tuning. I'm now diving into GenAI to build AI-driven applications, and this assistant itself is one of those projects, a live demo of how I combine full-stack engineering with AI.",
+
+  "education": [
+      {
+        "degree": "Master of Computer Applications (MCA)",
+        "institution": "GL Bajaj Institute of Technology, AKTU University",
+        "location": "Greater Noida, India",
+        "duration": "2023 – 2025",
+        "score": "75%"
+      },
+      {
+        "degree": "Bachelor of Computer Applications (BCA)",
+        "institution": "Institute of Management and Research, CCS University",
+        "location": "Ghaziabad, India",
+        "duration": "2020 – 2023",
+        "score": "65%"
+      },
+      {
+        "degree": "Senior Secondary (12th), CBSE Board",
+        "institution": "International Centre English School",
+        "location": "Kanpur, India",
+        "duration": "2018 – 2020",
+        "score": "63%"
+      },
+      {
+        "degree": "High School (10th), CBSE Board",
+        "institution": "Shree Sanatan Dharm Education Centre",
+        "location": "Kanpur, India",
+        "duration": "2017 – 2018",
+        "score": "59%"
+      }
+    ],
+
+  "skills": {
+    "programming_languages": ["C", "C++", "Python", "JavaScript", "TypeScript"],
+    "frameworks_libraries": ["React", "Redux Toolkit (RTK)", "HTML", "CSS", "Tailwind CSS", "Django", "FastAPI", "Flask"],
+    "genai_ml_tools": [],
+    "databases": ["PostgreSQL", "SQL", "Materialized Views", "Query Optimization & Indexing"],
+    "tools_platforms": ["Git", "GitHub", "Postman", "Linux", "Celery", "Kafka", "Redis", "WebSocket"],
+    "soft_skills": []
+  },
+
+  "experience": [
+      {
+        "company": "Einstellen.AI (Product-Based)",
+        "role": "Full Stack Developer",
+        "duration": "Feb 2025 – July 2026",
+        "location": "Noida, India",
+        "description": "AI-driven hiring platform built using Django and a microservices architecture.",
+        "responsibilities": [
+          "Owned backend design and development across 4 microservices for an AI-driven hiring platform.",
+          "Designed a feature-level access-control (RBAC) system across Django microservices and React/TypeScript frontend, using Redis-cached, fail-closed authorization checks for consistent, low-latency permission handling.",
+          "Built asynchronous AI-based interview workflows and automated report generation using Celery and REST APIs, improving system responsiveness under concurrent load.",
+          "Built reusable UI components in TypeScript and React, and used Redux Toolkit (RTK) for state management across the frontend.",
+          "Added real-time chat using WebSockets for bi-directional communication between users on the platform.",
+          "Used Apache Kafka to decouple microservices through an event-driven architecture, improving scalability and fault isolation.",
+          "Improved PostgreSQL performance for large, structured datasets through query tuning, indexing, and materialized views, reducing data retrieval latency."
+        ],
+        "technologies_used": ["Django", "React", "TypeScript", "Redux Toolkit", "Redis", "Celery", "Kafka", "PostgreSQL", "WebSocket", "REST APIs"]
+      },
+      {
+        "company": "Codezin Technology Solutions",
+        "role": "Full Stack Developer Intern",
+        "duration": "Aug 2023 – Oct 2023",
+        "location": "Kolkata, India",
+        "description": "Developed dynamic, scalable web applications.",
+        "responsibilities": [
+          "Developed dynamic, scalable web applications using Django, HTML, and JavaScript.",
+          "Revamped interactive website features that increased user engagement by 30%.",
+          "Led cross-browser compatibility testing, achieving 95% usability consistency across devices."
+        ],
+        "technologies_used": ["Django", "HTML", "JavaScript"]
+      },
+      {
+        "company": "Smile IT Solutions",
+        "role": "Web Developer Intern",
+        "duration": "Aug 2022 – Oct 2022",
+        "location": "Noida, India",
+        "description": "Built and designed web pages and websites, focusing primarily on HTML and CSS, with UI component design and light JavaScript logic.",
+        "responsibilities": [
+          "Built and maintained responsive web pages and websites using HTML and CSS.",
+          "Designed and developed UI components, focusing on clean layout and visual consistency.",
+          "Wrote small JavaScript logic to add interactivity to web pages and components.",
+          "Used Bootstrap and Material UI to speed up UI development and maintain design consistency across pages."
+        ],
+        "technologies_used": ["HTML", "CSS", "Bootstrap", "Material UI", "JavaScript"]
+      }
+    ],
+
+  "projects": [
+    {
+      "name": "Multi-Channel Notification Fan-Out System",
+      "description": "An event-driven notification system that fans out a single business event (e.g., 'order shipped') to Email, SMS, and Push channels via Kafka topics and independent Celery workers.",
+      "problem_solved": "Ensures one channel's failure doesn't block the others when delivering notifications across multiple channels.",
+      "tech_stack": ["Django", "Kafka", "Celery", "Redis", "PostgreSQL"],
+      "your_role": "",
+      "key_features": [
+        "Used Redis distributed locks and database-level unique constraints to keep message processing idempotent, avoiding duplicate sends under Kafka's at-least-once delivery guarantees.",
+        "Added a retry mechanism with exponential backoff and a dead-letter queue for failed deliveries, so provider outages don't affect the rest of the pipeline.",
+        "Built a PostgreSQL schema with a materialized view tracking per-channel delivery success rates for real-time visibility into notification health."
+      ],
+      "github_link": "https://github.com/Amansaxena16/Notification-System",
+      "live_demo_link": "",
+      "outcome_or_impact": ""
+    }
+  ],
+
+  "certifications": [],
+
+  "achievements": [],
+
+  "extracurricular": [],
+
+  "career_goals": "",
+
+  "faqs": [
+    {
+      "question": "Why should we hire you?",
+      "answer": ""
+    },
+    {
+      "question": "What are your strengths?",
+      "answer": ""
+    },
+    {
+      "question": "What are your weaknesses?",
+      "answer": ""
+    },
+    {
+      "question": "Where do you see yourself in 5 years?",
+      "answer": ""
+    }
+  ]
+}
