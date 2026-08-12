@@ -3,3 +3,4 @@
 __pycache__/
 *.pyc
 backend/implementations/vector_db/
+backend/db.sqlite3

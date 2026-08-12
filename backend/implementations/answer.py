@@ -7,15 +7,17 @@ from langchain_core.messages import HumanMessage, SystemMessage, convert_to_mess
 from langchain_groq import ChatGroq
 from langchain_huggingface import HuggingFaceEmbeddings
 
-from ingest import DB_NAME, embeddings
-
 load_dotenv()
 my_api_key = os.getenv('groq_api_key')
 if not my_api_key:
     raise ValueError('Could not find Groq API Key')
 
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DB_NAME = os.path.join(BASE_DIR, 'vector_db')
+
 model = 'llama-3.3-70b-versatile'
 RETRIEVAL_K = 5
+embeddings = HuggingFaceEmbeddings(model_name='all-MiniLM-L6-v2')
 
 SYSTEM_PROMPT = """
 You are a friendly AI assistant representing Aman Saxena on his personal portfolio.
