@@ -1,0 +1,38 @@
+.empty-state {
+  max-width: 480px;
+  padding: 0 24px;
+  text-align: center;
+}
+
+.empty-state-title {
+  font-family: var(--font-heading);
+  font-size: 28px;
+  margin: 0 0 10px;
+}
+
+.empty-state-subtitle {
+  color: var(--color-text-muted);
+  margin: 0 0 24px;
+}
+
+.empty-state-suggestions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+}
+
+.suggestion-chip {
+  padding: 8px 14px;
+  border-radius: 16px;
+  border: 0.8px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.suggestion-chip:hover {
+  border-color: var(--color-accent);
+}
