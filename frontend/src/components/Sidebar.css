@@ -1,7 +1,7 @@
 .sidebar {
   width: 260px;
   flex-shrink: 0;
-  background: var(--color-surface);
+  background: var(--color-sidebar);
   border-right: 1px solid var(--color-border);
   display: flex;
   flex-direction: column;
@@ -18,17 +18,19 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 28px;
-  height: 28px;
+  width: 30px;
+  height: 30px;
   border-radius: 50%;
-  border: 0.8px solid var(--color-border);
-  color: var(--color-text);
+  background: var(--color-accent);
+  color: var(--color-accent-on);
+  box-shadow: 0 0 0 4px var(--color-accent-glow);
 }
 
 .sidebar-title {
   font-family: var(--font-heading);
   font-size: 20px;
   font-weight: 600;
+  letter-spacing: -0.01em;
   color: var(--color-text);
   flex: 1;
 }
@@ -37,30 +39,47 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 28px;
-  height: 28px;
+  width: 30px;
+  height: 30px;
   border-radius: 50%;
-  border: 0.8px solid var(--color-border);
+  border: 1px solid var(--color-border);
   background: transparent;
-  color: var(--color-text);
+  color: var(--color-text-muted);
   cursor: pointer;
+}
+
+.theme-toggle:hover {
+  background: var(--color-hover);
+  border-color: var(--color-border-strong);
+  color: var(--color-text);
 }
 
 .new-chat-btn {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
+  gap: 8px;
   margin: 0 20px;
-  padding: 10px 14px;
-  border-radius: 4px;
-  border: 0.8px solid var(--color-border);
-  background: transparent;
+  padding: 11px 14px;
+  border-radius: 10px;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
   color: var(--color-text);
   font-family: var(--font-heading);
   font-size: 15px;
   font-weight: 600;
+  box-shadow: var(--shadow-sm);
   cursor: pointer;
+}
+
+.new-chat-btn:hover {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+  box-shadow: var(--shadow-md);
+}
+
+.new-chat-btn:active {
+  transform: scale(0.98);
 }
 
 .sidebar-spacer {
@@ -69,7 +88,8 @@
 
 .sidebar-footer {
   padding: 18px 20px;
+  border-top: 1px solid var(--color-border);
   font-family: var(--font-heading);
   font-size: 13px;
-  color: var(--color-text-muted);
+  color: var(--color-text-subtle);
 }

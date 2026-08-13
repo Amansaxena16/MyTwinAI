@@ -1,0 +1,39 @@
+.app {
+  display: flex;
+  height: 100%;
+}
+
+.app-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-width: 0;
+}
+
+.app-body {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+}
+
+.app-empty {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.app-error {
+  max-width: var(--layout-column);
+  width: 100%;
+  margin: 0 auto;
+  padding: 10px 16px;
+  border-radius: 10px;
+  border: 1px solid var(--color-danger);
+  background: var(--color-danger-bg);
+  color: var(--color-danger);
+  font-size: 15px;
+  text-align: center;
+  animation: message-in 320ms var(--ease) both;
+}

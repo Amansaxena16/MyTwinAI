@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import './App.css'
 import { askQuestion } from './api/chat'
 import ChatInput from './components/ChatInput'
 import EmptyState from './components/EmptyState'
@@ -48,30 +49,19 @@ function App() {
   }
 
   return (
-    <div style={{ display: 'flex', height: '100%' }}>
+    <div className="app">
       <Sidebar theme={theme} onToggleTheme={toggleTheme} onNewChat={handleNewChat} />
-      <main style={{ flex: 1, display: 'flex', flexDirection: 'column', height: '100%', minWidth: 0 }}>
-        <div style={{ flex: 1, display: 'flex', overflow: 'hidden' }}>
+      <main className="app-main">
+        <div className="app-body">
           {messages.length === 0 ? (
-            <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <div className="app-empty">
               <EmptyState onSuggestionClick={handleSend} />
             </div>
           ) : (
             <MessageList messages={messages} loading={loading} />
           )}
         </div>
-        {error && (
-          <p
-            style={{
-              color: 'var(--color-danger)',
-              textAlign: 'center',
-              fontSize: 15,
-              margin: '0 24px 8px',
-            }}
-          >
-            {error}
-          </p>
-        )}
+        {error && <div className="app-error">{error}</div>}
         <ChatInput onSend={handleSend} loading={loading} />
       </main>
     </div>

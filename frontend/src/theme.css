@@ -1,38 +1,66 @@
 :root {
   --font-heading: 'Sora', system-ui, sans-serif;
   --font-body: 'Lora', system-ui, sans-serif;
+  --font-mono: ui-monospace, 'SFMono-Regular', 'Menlo', monospace;
 
-  --color-bg: #f3f2f2;
-  --color-surface: #eae9e9;
-  --color-text: #201f1d;
-  --color-text-muted: color-mix(in srgb, #201f1d 75%, transparent);
-  --color-border: color-mix(in srgb, #201f1d 16%, transparent);
+  --layout-column: 720px;
 
-  --color-accent: #b68235;
-  --color-accent-2: #ac803e;
+  --color-bg: #f7f4f0;
+  --color-surface: #fffdfa;
+  --color-sidebar: #efeae3;
+  --color-text: #1c1a17;
+  --color-text-muted: color-mix(in srgb, #1c1a17 75%, transparent);
+  --color-text-subtle: color-mix(in srgb, #1c1a17 55%, transparent);
+  --color-border: color-mix(in srgb, #1c1a17 12%, transparent);
+  --color-border-strong: color-mix(in srgb, #1c1a17 22%, transparent);
+  --color-hover: color-mix(in srgb, #1c1a17 5%, transparent);
 
-  --color-user-bg: #fff3e4;
-  --color-user-border: #facb8d;
-  --color-assistant-bg: #f8f4f4;
+  --color-accent: #b0670f;
+  --color-accent-hover: #97580b;
+  --color-accent-glow: color-mix(in srgb, #b0670f 16%, transparent);
+  --color-accent-on: #fffdfa;
+
+  --color-user-bg: linear-gradient(135deg, #fff1dd 0%, #ffe4c4 100%);
+  --color-user-border: #f0c68a;
+  --color-code-bg: color-mix(in srgb, #1c1a17 6%, transparent);
 
   --color-danger: #b3261e;
+  --color-danger-bg: color-mix(in srgb, #b3261e 8%, transparent);
+
+  --shadow-sm: 0 1px 2px rgb(28 26 23 / 6%), 0 1px 3px rgb(28 26 23 / 4%);
+  --shadow-md: 0 4px 12px rgb(28 26 23 / 8%), 0 2px 4px rgb(28 26 23 / 4%);
+  --shadow-lg: 0 12px 32px rgb(28 26 23 / 10%), 0 4px 8px rgb(28 26 23 / 5%);
+
+  --ease: cubic-bezier(0.32, 0.72, 0, 1);
+  --duration: 180ms;
 }
 
 :root[data-theme='dark'] {
-  --color-bg: #1a1918;
-  --color-surface: #242220;
-  --color-text: #f3f2f2;
-  --color-text-muted: color-mix(in srgb, #f3f2f2 75%, transparent);
-  --color-border: color-mix(in srgb, #f3f2f2 16%, transparent);
+  --color-bg: #171614;
+  --color-surface: #221f1c;
+  --color-sidebar: #1c1a18;
+  --color-text: #f4f1ec;
+  --color-text-muted: color-mix(in srgb, #f4f1ec 75%, transparent);
+  --color-text-subtle: color-mix(in srgb, #f4f1ec 55%, transparent);
+  --color-border: color-mix(in srgb, #f4f1ec 12%, transparent);
+  --color-border-strong: color-mix(in srgb, #f4f1ec 22%, transparent);
+  --color-hover: color-mix(in srgb, #f4f1ec 7%, transparent);
 
-  --color-accent: #b68235;
-  --color-accent-2: #ac803e;
+  --color-accent: #e9a94a;
+  --color-accent-hover: #f2b962;
+  --color-accent-glow: color-mix(in srgb, #e9a94a 18%, transparent);
+  --color-accent-on: #171614;
 
-  --color-user-bg: #3a2f22;
-  --color-user-border: #5a3b0a;
-  --color-assistant-bg: #201f1e;
+  --color-user-bg: linear-gradient(135deg, #3b2e1c 0%, #2e2417 100%);
+  --color-user-border: #5c451f;
+  --color-code-bg: color-mix(in srgb, #f4f1ec 8%, transparent);
 
-  --color-danger: #ff6659;
+  --color-danger: #ff8a7a;
+  --color-danger-bg: color-mix(in srgb, #ff8a7a 10%, transparent);
+
+  --shadow-sm: 0 1px 2px rgb(0 0 0 / 30%), 0 1px 3px rgb(0 0 0 / 20%);
+  --shadow-md: 0 4px 12px rgb(0 0 0 / 36%), 0 2px 4px rgb(0 0 0 / 24%);
+  --shadow-lg: 0 12px 32px rgb(0 0 0 / 44%), 0 4px 8px rgb(0 0 0 / 28%);
 }
 
 * {
@@ -59,4 +87,30 @@ h1,
 h2,
 h3 {
   font-family: var(--font-heading);
+}
+
+button {
+  transition:
+    background var(--duration) var(--ease),
+    border-color var(--duration) var(--ease),
+    color var(--duration) var(--ease),
+    transform var(--duration) var(--ease),
+    box-shadow var(--duration) var(--ease);
+}
+
+button:focus-visible,
+textarea:focus-visible,
+a:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

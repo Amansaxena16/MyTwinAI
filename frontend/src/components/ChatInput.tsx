@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useLayoutEffect, useRef, useState } from 'react'
 import type { KeyboardEvent } from 'react'
 import './ChatInput.css'
 
@@ -9,6 +9,15 @@ interface ChatInputProps {
 
 function ChatInput({ onSend, loading }: ChatInputProps) {
   const [value, setValue] = useState('')
+  const textareaRef = useRef<HTMLTextAreaElement>(null)
+
+  // Grow the textarea with its content, up to the max-height set in CSS.
+  useLayoutEffect(() => {
+    const textarea = textareaRef.current
+    if (!textarea) return
+    textarea.style.height = 'auto'
+    textarea.style.height = `${textarea.scrollHeight}px`
+  }, [value])
 
   const submit = () => {
     const question = value.trim()
@@ -25,25 +34,31 @@ function ChatInput({ onSend, loading }: ChatInputProps) {
   }
 
   return (
-    <div className="chat-input">
-      <textarea
-        className="chat-input-textarea"
-        value={value}
-        onChange={(event) => setValue(event.target.value)}
-        onKeyDown={handleKeyDown}
-        placeholder="Ask about Aman's experience, skills, or projects..."
-        rows={1}
-        disabled={loading}
-      />
-      <button
-        type="button"
-        className="chat-input-send"
-        onClick={submit}
-        disabled={loading || !value.trim()}
-        aria-label="Send"
-      >
-        <SendIcon />
-      </button>
+    <div className="chat-input-wrapper">
+      <div className="chat-input">
+        <textarea
+          ref={textareaRef}
+          className="chat-input-textarea"
+          value={value}
+          onChange={(event) => setValue(event.target.value)}
+          onKeyDown={handleKeyDown}
+          placeholder="Ask about Aman's experience, skills, or projects..."
+          rows={1}
+          disabled={loading}
+        />
+        <button
+          type="button"
+          className="chat-input-send"
+          onClick={submit}
+          disabled={loading || !value.trim()}
+          aria-label="Send"
+        >
+          <SendIcon />
+        </button>
+      </div>
+      <p className="chat-input-hint">
+        <kbd>Enter</kbd> to send · <kbd>Shift</kbd> + <kbd>Enter</kbd> for a new line
+      </p>
     </div>
   )
 }

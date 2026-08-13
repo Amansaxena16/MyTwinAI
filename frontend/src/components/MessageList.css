@@ -1,14 +1,20 @@
 .message-list {
   flex: 1;
   overflow-y: auto;
-  padding: 24px;
+  padding: 32px 24px 8px;
+}
+
+.message-list-inner {
+  max-width: var(--layout-column);
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 28px;
 }
 
 .message {
   display: flex;
+  animation: message-in 320ms var(--ease) both;
 }
 
 .message-user {
@@ -19,36 +25,46 @@
   justify-content: flex-start;
 }
 
+@keyframes message-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Only the user gets a bubble; the assistant reads as page text. */
 .message-bubble {
-  max-width: 70%;
-  padding: 12px 16px;
-  border-radius: 12px;
-  white-space: pre-wrap;
-  line-height: 1.7;
-}
-
-.message-user .message-bubble {
+  max-width: 82%;
+  padding: 12px 18px;
+  border-radius: 18px 18px 4px 18px;
   background: var(--color-user-bg);
-  border: 0.8px solid var(--color-user-border);
+  border: 1px solid var(--color-user-border);
+  box-shadow: var(--shadow-sm);
+  white-space: pre-wrap;
+  line-height: 1.65;
 }
 
-.message-assistant .message-bubble {
-  background: var(--color-assistant-bg);
-  border: 0.8px solid var(--color-border);
+.message-assistant .markdown {
+  max-width: 100%;
+  min-width: 0;
 }
 
 .typing-indicator {
   display: flex;
   align-items: center;
-  gap: 4px;
-  padding: 12px 14px;
+  gap: 5px;
+  height: 28px;
 }
 
 .typing-indicator span {
-  width: 6px;
-  height: 6px;
+  width: 7px;
+  height: 7px;
   border-radius: 50%;
-  background: var(--color-text-muted);
+  background: var(--color-accent);
   animation: typing-bounce 1.2s infinite ease-in-out;
 }
 
@@ -65,10 +81,111 @@
   60%,
   100% {
     transform: translateY(0);
-    opacity: 0.4;
+    opacity: 0.35;
   }
   30% {
-    transform: translateY(-4px);
+    transform: translateY(-5px);
     opacity: 1;
   }
+}
+
+/* --- Rendered markdown --- */
+
+.markdown > *:first-child {
+  margin-top: 0;
+}
+
+.markdown > *:last-child {
+  margin-bottom: 0;
+}
+
+.markdown p {
+  margin: 0 0 14px;
+}
+
+.markdown ul,
+.markdown ol {
+  margin: 0 0 14px;
+  padding-left: 22px;
+}
+
+.markdown li {
+  margin-bottom: 6px;
+}
+
+.markdown li::marker {
+  color: var(--color-accent);
+}
+
+.markdown h1,
+.markdown h2,
+.markdown h3 {
+  font-size: 1.05em;
+  font-weight: 600;
+  margin: 20px 0 10px;
+}
+
+.markdown strong {
+  font-weight: 700;
+}
+
+.markdown a {
+  color: var(--color-accent);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+}
+
+.markdown code {
+  font-family: var(--font-mono);
+  font-size: 0.87em;
+  padding: 2px 6px;
+  border-radius: 5px;
+  background: var(--color-code-bg);
+}
+
+.markdown pre {
+  margin: 0 0 14px;
+  padding: 14px 16px;
+  border-radius: 10px;
+  overflow-x: auto;
+  background: var(--color-code-bg);
+  border: 1px solid var(--color-border);
+}
+
+.markdown pre code {
+  padding: 0;
+  background: none;
+  font-size: 0.85em;
+}
+
+.markdown blockquote {
+  margin: 0 0 14px;
+  padding-left: 14px;
+  border-left: 2px solid var(--color-accent);
+  color: var(--color-text-muted);
+}
+
+.markdown table {
+  width: 100%;
+  margin: 0 0 14px;
+  border-collapse: collapse;
+  font-size: 0.94em;
+}
+
+.markdown th,
+.markdown td {
+  padding: 8px 12px;
+  border: 1px solid var(--color-border);
+  text-align: left;
+}
+
+.markdown th {
+  background: var(--color-code-bg);
+  font-weight: 600;
+}
+
+.markdown hr {
+  margin: 20px 0;
+  border: none;
+  border-top: 1px solid var(--color-border);
 }
