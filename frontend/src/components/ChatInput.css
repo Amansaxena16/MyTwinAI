@@ -52,13 +52,14 @@
   flex-shrink: 0;
   border-radius: 50%;
   border: none;
-  background: var(--color-accent);
+  background: var(--gradient-accent);
   color: var(--color-accent-on);
+  box-shadow: var(--shadow-accent);
   cursor: pointer;
 }
 
 .chat-input-send:hover:not(:disabled) {
-  background: var(--color-accent-hover);
+  background: var(--gradient-accent-hover);
   transform: scale(1.06);
 }
 
@@ -67,8 +68,9 @@
 }
 
 .chat-input-send:disabled {
-  background: var(--color-hover);
+  background: var(--color-border);
   color: var(--color-text-subtle);
+  box-shadow: none;
   cursor: not-allowed;
 }
 

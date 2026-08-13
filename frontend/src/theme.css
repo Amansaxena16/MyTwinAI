@@ -1,66 +1,46 @@
 :root {
+  color-scheme: dark;
+
   --font-heading: 'Sora', system-ui, sans-serif;
   --font-body: 'Lora', system-ui, sans-serif;
   --font-mono: ui-monospace, 'SFMono-Regular', 'Menlo', monospace;
 
   --layout-column: 720px;
 
-  --color-bg: #f7f4f0;
-  --color-surface: #fffdfa;
-  --color-sidebar: #efeae3;
-  --color-text: #1c1a17;
-  --color-text-muted: color-mix(in srgb, #1c1a17 75%, transparent);
-  --color-text-subtle: color-mix(in srgb, #1c1a17 55%, transparent);
-  --color-border: color-mix(in srgb, #1c1a17 12%, transparent);
-  --color-border-strong: color-mix(in srgb, #1c1a17 22%, transparent);
-  --color-hover: color-mix(in srgb, #1c1a17 5%, transparent);
+  --color-bg: #0a0f1e;
+  --color-surface: #141c33;
+  --color-sidebar: #0d1424;
+  --color-text: #f8fafc;
+  --color-text-muted: #cbd5e1;
+  --color-text-subtle: #94a3b8;
+  --color-border: #253253;
+  --color-border-strong: #33436b;
+  --color-hover: rgb(255 255 255 / 6%);
 
-  --color-accent: #b0670f;
-  --color-accent-hover: #97580b;
-  --color-accent-glow: color-mix(in srgb, #b0670f 16%, transparent);
-  --color-accent-on: #fffdfa;
+  --color-accent: #60a5fa;
+  --color-accent-strong: #3b82f6;
+  --color-accent-on: #ffffff;
+  --color-accent-glow: rgb(99 102 241 / 24%);
 
-  --color-user-bg: linear-gradient(135deg, #fff1dd 0%, #ffe4c4 100%);
-  --color-user-border: #f0c68a;
-  --color-code-bg: color-mix(in srgb, #1c1a17 6%, transparent);
+  --gradient-accent: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+  --gradient-accent-hover: linear-gradient(135deg, #549bff 0%, #9c6dff 100%);
+  --gradient-title: linear-gradient(135deg, #ffffff 20%, #a78bfa 100%);
 
-  --color-danger: #b3261e;
-  --color-danger-bg: color-mix(in srgb, #b3261e 8%, transparent);
+  --color-user-bg: var(--gradient-accent);
+  --color-user-text: #ffffff;
+  --color-user-border: rgb(255 255 255 / 14%);
+  --color-code-bg: rgb(255 255 255 / 7%);
 
-  --shadow-sm: 0 1px 2px rgb(28 26 23 / 6%), 0 1px 3px rgb(28 26 23 / 4%);
-  --shadow-md: 0 4px 12px rgb(28 26 23 / 8%), 0 2px 4px rgb(28 26 23 / 4%);
-  --shadow-lg: 0 12px 32px rgb(28 26 23 / 10%), 0 4px 8px rgb(28 26 23 / 5%);
+  --color-danger: #f87171;
+  --color-danger-bg: rgb(248 113 113 / 12%);
+
+  --shadow-sm: 0 1px 2px rgb(0 0 0 / 40%), 0 1px 3px rgb(0 0 0 / 28%);
+  --shadow-md: 0 4px 12px rgb(0 0 0 / 44%), 0 2px 4px rgb(0 0 0 / 30%);
+  --shadow-lg: 0 12px 32px rgb(0 0 0 / 52%), 0 4px 8px rgb(0 0 0 / 34%);
+  --shadow-accent: 0 4px 16px rgb(59 130 246 / 32%);
 
   --ease: cubic-bezier(0.32, 0.72, 0, 1);
   --duration: 180ms;
-}
-
-:root[data-theme='dark'] {
-  --color-bg: #171614;
-  --color-surface: #221f1c;
-  --color-sidebar: #1c1a18;
-  --color-text: #f4f1ec;
-  --color-text-muted: color-mix(in srgb, #f4f1ec 75%, transparent);
-  --color-text-subtle: color-mix(in srgb, #f4f1ec 55%, transparent);
-  --color-border: color-mix(in srgb, #f4f1ec 12%, transparent);
-  --color-border-strong: color-mix(in srgb, #f4f1ec 22%, transparent);
-  --color-hover: color-mix(in srgb, #f4f1ec 7%, transparent);
-
-  --color-accent: #e9a94a;
-  --color-accent-hover: #f2b962;
-  --color-accent-glow: color-mix(in srgb, #e9a94a 18%, transparent);
-  --color-accent-on: #171614;
-
-  --color-user-bg: linear-gradient(135deg, #3b2e1c 0%, #2e2417 100%);
-  --color-user-border: #5c451f;
-  --color-code-bg: color-mix(in srgb, #f4f1ec 8%, transparent);
-
-  --color-danger: #ff8a7a;
-  --color-danger-bg: color-mix(in srgb, #ff8a7a 10%, transparent);
-
-  --shadow-sm: 0 1px 2px rgb(0 0 0 / 30%), 0 1px 3px rgb(0 0 0 / 20%);
-  --shadow-md: 0 4px 12px rgb(0 0 0 / 36%), 0 2px 4px rgb(0 0 0 / 24%);
-  --shadow-lg: 0 12px 32px rgb(0 0 0 / 44%), 0 4px 8px rgb(0 0 0 / 28%);
 }
 
 * {
@@ -103,6 +83,22 @@ textarea:focus-visible,
 a:focus-visible {
   outline: 2px solid var(--color-accent);
   outline-offset: 2px;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  border: 3px solid transparent;
+  border-radius: 999px;
+  background: var(--color-border-strong);
+  background-clip: content-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-text-subtle);
+  background-clip: content-box;
 }
 
 @media (prefers-reduced-motion: reduce) {

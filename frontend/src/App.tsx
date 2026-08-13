@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import './App.css'
 import { askQuestion } from './api/chat'
 import ChatInput from './components/ChatInput'
@@ -7,22 +7,11 @@ import MessageList from './components/MessageList'
 import Sidebar from './components/Sidebar'
 import type { HistoryEntry, Message } from './types/chat'
 
-type Theme = 'light' | 'dark'
-
 function App() {
-  const [theme, setTheme] = useState<Theme>('light')
   const [messages, setMessages] = useState<Message[]>([])
   const [history, setHistory] = useState<HistoryEntry[]>([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
-
-  useEffect(() => {
-    document.documentElement.setAttribute('data-theme', theme)
-  }, [theme])
-
-  const toggleTheme = () => {
-    setTheme((prev) => (prev === 'light' ? 'dark' : 'light'))
-  }
 
   const handleNewChat = () => {
     setMessages([])
@@ -50,7 +39,7 @@ function App() {
 
   return (
     <div className="app">
-      <Sidebar theme={theme} onToggleTheme={toggleTheme} onNewChat={handleNewChat} />
+      <Sidebar onNewChat={handleNewChat} />
       <main className="app-main">
         <div className="app-body">
           {messages.length === 0 ? (
