@@ -49,9 +49,61 @@
   line-height: 1.65;
 }
 
-.message-assistant .markdown {
-  max-width: 100%;
+.message-body {
   min-width: 0;
+  max-width: 100%;
+}
+
+/* Blinking caret while tokens are still arriving. */
+.markdown.is-streaming > *:last-child::after {
+  content: '';
+  display: inline-block;
+  width: 7px;
+  height: 1em;
+  margin-left: 3px;
+  vertical-align: text-bottom;
+  background: var(--color-accent);
+  animation: caret-blink 1s steps(2, start) infinite;
+}
+
+@keyframes caret-blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+/* --- Message actions --- */
+
+.message-actions {
+  display: flex;
+  gap: 6px;
+  margin-top: 10px;
+  opacity: 0;
+  transition: opacity var(--duration) var(--ease);
+}
+
+.message-assistant:hover .message-actions,
+.message-actions:focus-within {
+  opacity: 1;
+}
+
+.message-action {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--color-border);
+  background: var(--gradient-surface);
+  color: var(--color-text-subtle);
+  font-family: var(--font-heading);
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.message-action:hover {
+  border-color: var(--color-accent-strong);
+  color: var(--color-accent);
 }
 
 .typing-indicator {

@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import './App.css'
-import { askQuestion } from './api/chat'
+import { streamQuestion } from './api/chat'
 import ChatInput from './components/ChatInput'
 import EmptyState from './components/EmptyState'
 import MessageList from './components/MessageList'
@@ -9,32 +9,56 @@ import type { HistoryEntry, Message } from './types/chat'
 
 function App() {
   const [messages, setMessages] = useState<Message[]>([])
-  const [history, setHistory] = useState<HistoryEntry[]>([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
   const handleNewChat = () => {
     setMessages([])
-    setHistory([])
     setLoading(false)
     setError(null)
   }
 
-  const handleSend = async (question: string) => {
+  /**
+   * Asks a question on top of `baseMessages`, which become the history sent to
+   * the backend. Regenerating just replays with a shorter base.
+   */
+  const sendQuestion = async (question: string, baseMessages: Message[]) => {
     setError(null)
-    setMessages((prev) => [...prev, { role: 'user', content: question }])
     setLoading(true)
 
+    const history: HistoryEntry[] = baseMessages.map(({ role, content }) => ({ role, content }))
+    // The empty assistant message is the slot the streamed tokens land in.
+    setMessages([...baseMessages, { role: 'user', content: question }, { role: 'assistant', content: '' }])
+
+    let answer = ''
     try {
-      const response = await askQuestion(question, history)
-      setMessages((prev) => [...prev, { role: 'assistant', content: response.answer }])
-      setHistory(response.history)
+      await streamQuestion(question, history, (token) => {
+        answer += token
+        setMessages((prev) => {
+          const next = [...prev]
+          next[next.length - 1] = { role: 'assistant', content: answer }
+          return next
+        })
+      })
     } catch (err) {
       console.error('Failed to get response', err)
       setError('Something went wrong while getting a response. Please try again.')
+      // Drop the placeholder so an empty bubble is not left behind.
+      if (!answer) {
+        setMessages([...baseMessages, { role: 'user', content: question }])
+      }
     } finally {
       setLoading(false)
     }
+  }
+
+  const handleSend = (question: string) => sendQuestion(question, messages)
+
+  const handleRegenerate = () => {
+    if (loading) return
+    const lastUserIndex = messages.map((message) => message.role).lastIndexOf('user')
+    if (lastUserIndex === -1) return
+    sendQuestion(messages[lastUserIndex].content, messages.slice(0, lastUserIndex))
   }
 
   return (
@@ -47,7 +71,11 @@ function App() {
               <EmptyState onSuggestionClick={handleSend} />
             </div>
           ) : (
-            <MessageList messages={messages} loading={loading} />
+            <MessageList
+              messages={messages}
+              loading={loading}
+              onRegenerate={handleRegenerate}
+            />
           )}
         </div>
         {error && <div className="app-error">{error}</div>}
