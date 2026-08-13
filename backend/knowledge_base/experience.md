@@ -1,5 +1,17 @@
 # Work Experience
 
+## Total Experience
+
+Aman has around 2 years of hands-on work experience in total.
+
+This is roughly 1.5 years as a full-time Full Stack Developer at Einstellen.AI,
+plus about 4 months across two internships.
+
+His experience is not one continuous stretch: there are study gaps between the
+roles below. Counting from the start of his first internship to the end of his
+latest role gives close to 4 years, which is wrong. The correct answer to
+"how much total experience does Aman have" is around 2 years.
+
 ## Einstellen.AI (Product-Based) — Full Stack Developer
 
 Duration: Feb 2025 – July 2026
