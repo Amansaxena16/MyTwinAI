@@ -10,11 +10,14 @@ from langchain_core.documents import Document
 from langchain_core.messages import BaseMessage, HumanMessage, SystemMessage, convert_to_messages
 from langchain_groq import ChatGroq
 from langchain_huggingface import HuggingFaceEmbeddings
+from langchain_ollama import ChatOllama
 
 load_dotenv()
-my_api_key = os.getenv('groq_api_key')
-if not my_api_key:
-    raise ValueError('Could not find Groq API Key')
+
+# 'groq' for the deployed app, 'ollama' to test locally without spending tokens.
+LLM_PROVIDER = os.getenv('llm_provider', 'groq').lower()
+OLLAMA_MODEL = os.getenv('ollama_model', 'phi3')
+OLLAMA_BASE_URL = os.getenv('ollama_base_url', 'http://localhost:11434')
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DB_NAME = os.path.join(BASE_DIR, 'vector_db')
@@ -93,7 +96,20 @@ directly if you would like to know more.
 """
 
 vectorstore = Chroma(embedding_function=embeddings, persist_directory=DB_NAME)
-llm = ChatGroq(temperature=0, model_name=model, groq_api_key=my_api_key)
+
+
+def build_llm():
+    """Groq in production, Ollama for local testing so no tokens are spent."""
+    if LLM_PROVIDER == 'ollama':
+        return ChatOllama(temperature=0, model=OLLAMA_MODEL, base_url=OLLAMA_BASE_URL)
+
+    api_key = os.getenv('groq_api_key')
+    if not api_key:
+        raise ValueError('Could not find Groq API Key')
+    return ChatGroq(temperature=0, model_name=model, groq_api_key=api_key)
+
+
+llm = build_llm()
 
 
 def load_chunks_by_doc_type() -> dict[str, list[Document]]:
