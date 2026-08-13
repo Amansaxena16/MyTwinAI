@@ -7,11 +7,28 @@
   flex-direction: column;
 }
 
-.sidebar-top {
+/* The brand is the "new chat" control. */
+.sidebar-brand {
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 22px 20px 18px;
+  width: calc(100% - 24px);
+  margin: 14px 12px 0;
+  padding: 10px 12px;
+  border: 1px solid transparent;
+  border-radius: 12px;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+}
+
+.sidebar-brand:hover {
+  background: var(--color-hover);
+  border-color: var(--color-border);
+}
+
+.sidebar-brand:active {
+  transform: scale(0.99);
 }
 
 .sidebar-logo {
@@ -20,10 +37,16 @@
   justify-content: center;
   width: 30px;
   height: 30px;
+  flex-shrink: 0;
   border-radius: 50%;
   background: var(--gradient-accent);
   color: var(--color-accent-on);
   box-shadow: 0 0 0 4px var(--color-accent-glow);
+  transition: box-shadow var(--duration) var(--ease);
+}
+
+.sidebar-brand:hover .sidebar-logo {
+  box-shadow: 0 0 0 5px var(--color-accent-glow), var(--shadow-accent);
 }
 
 .sidebar-title {
@@ -33,34 +56,6 @@
   letter-spacing: -0.01em;
   color: var(--color-text);
   flex: 1;
-}
-
-.new-chat-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  margin: 0 20px;
-  padding: 11px 14px;
-  border-radius: 10px;
-  border: 1px solid var(--color-border);
-  background: var(--color-surface);
-  color: var(--color-text);
-  font-family: var(--font-heading);
-  font-size: 15px;
-  font-weight: 600;
-  box-shadow: var(--shadow-sm);
-  cursor: pointer;
-}
-
-.new-chat-btn:hover {
-  border-color: var(--color-accent);
-  color: var(--color-accent);
-  box-shadow: var(--shadow-md);
-}
-
-.new-chat-btn:active {
-  transform: scale(0.98);
 }
 
 .sidebar-spacer {
