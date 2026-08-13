@@ -65,7 +65,7 @@ function App() {
             style={{
               color: 'var(--color-danger)',
               textAlign: 'center',
-              fontSize: 13,
+              fontSize: 15,
               margin: '0 24px 8px',
             }}
           >
