@@ -4,11 +4,16 @@ import os
 from langchain_chroma import Chroma
 from langchain_community.document_loaders import TextLoader
 from langchain_huggingface import HuggingFaceEmbeddings
-from langchain_text_splitters import RecursiveCharacterTextSplitter
+from langchain_text_splitters import MarkdownHeaderTextSplitter, RecursiveCharacterTextSplitter
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 KNOWLEDGE_BASE_DIR = os.path.join(os.path.dirname(BASE_DIR), 'knowledge_base')
 DB_NAME = os.path.join(BASE_DIR, 'vector_db')
+
+HEADERS_TO_SPLIT_ON = [('#', 'title'), ('##', 'section')]
+# Only long sections get split further; most sit well under this.
+MAX_CHUNK_SIZE = 1200
+CHUNK_OVERLAP = 150
 
 
 def fetch_documents():
@@ -26,8 +31,33 @@ def fetch_documents():
 
 
 def create_chunks(documents):
-    text_splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=200)
-    chunks = text_splitter.split_documents(documents)
+    """Split on markdown headings so a section is never cut in half.
+
+    Each chunk is prefixed with its heading path ("Skills > Databases") so a
+    bare list of technology names still embeds close to a question that asks
+    about "skills" - the names alone carry almost no matching meaning.
+    """
+    header_splitter = MarkdownHeaderTextSplitter(
+        headers_to_split_on=HEADERS_TO_SPLIT_ON, strip_headers=True
+    )
+    overflow_splitter = RecursiveCharacterTextSplitter(
+        chunk_size=MAX_CHUNK_SIZE, chunk_overlap=CHUNK_OVERLAP
+    )
+
+    chunks = []
+    for doc in documents:
+        for section in header_splitter.split_text(doc.page_content):
+            section.metadata = {**doc.metadata, **section.metadata}
+
+            heading_path = ' > '.join(
+                part
+                for part in (section.metadata.get('title'), section.metadata.get('section'))
+                if part
+            )
+            if heading_path:
+                section.page_content = f'{heading_path}\n\n{section.page_content}'
+
+            chunks.extend(overflow_splitter.split_documents([section]))
     return chunks
 
 

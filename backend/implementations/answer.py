@@ -1,4 +1,5 @@
 import os
+from collections import defaultdict
 from collections.abc import Iterator
 
 from dotenv import load_dotenv
@@ -17,7 +18,8 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DB_NAME = os.path.join(BASE_DIR, 'vector_db')
 
 model = 'llama-3.3-70b-versatile'
-RETRIEVAL_K = 5
+# How many knowledge base files a single answer may draw on.
+MAX_SOURCE_FILES = 4
 embeddings = HuggingFaceEmbeddings(model_name='all-MiniLM-L6-v2')
 
 OFF_TOPIC_REPLY = (
@@ -78,12 +80,49 @@ directly if you would like to know more.
 """
 
 vectorstore = Chroma(embedding_function=embeddings, persist_directory=DB_NAME)
-retriever = vectorstore.as_retriever(search_kwargs={'k': RETRIEVAL_K})
 llm = ChatGroq(temperature=0, model_name=model, groq_api_key=my_api_key)
 
 
+def load_chunks_by_doc_type() -> dict[str, list[Document]]:
+    """Every stored chunk, grouped by the file it came from."""
+    stored = vectorstore.get()
+    grouped: dict[str, list[Document]] = defaultdict(list)
+    for metadata, content in zip(stored['metadatas'], stored['documents']):
+        grouped[metadata.get('doc_type')].append(
+            Document(page_content=content, metadata=metadata)
+        )
+    return grouped
+
+
+CHUNKS_BY_DOC_TYPE = load_chunks_by_doc_type()
+TOTAL_CHUNKS = max(1, sum(len(chunks) for chunks in CHUNKS_BY_DOC_TYPE.values()))
+
+
+def rank_source_files(question: str) -> list[str]:
+    """Order the knowledge base files by their best matching section."""
+    scored = vectorstore.similarity_search_with_relevance_scores(question, k=TOTAL_CHUNKS)
+
+    best_score: dict[str, float] = {}
+    for doc, score in scored:
+        doc_type = doc.metadata.get('doc_type')
+        if doc_type and score > best_score.get(doc_type, float('-inf')):
+            best_score[doc_type] = score
+
+    return [doc_type for doc_type, _ in sorted(best_score.items(), key=lambda item: -item[1])]
+
+
 def fetch_context(question: str) -> list[Document]:
-    return retriever.invoke(question)
+    """Pick the most relevant files, then include every section of them.
+
+    Matching section by section is what lost half the answer before: asking
+    "what are your skills" only matched two of the six skill sections, so the
+    rest never reached the model. Files are small, so once one is a match its
+    whole content goes in.
+    """
+    context = []
+    for doc_type in rank_source_files(question)[:MAX_SOURCE_FILES]:
+        context.extend(CHUNKS_BY_DOC_TYPE.get(doc_type, []))
+    return context
 
 
 def build_messages(question: str, history: list[dict]) -> tuple[list[BaseMessage], list[Document]]:
