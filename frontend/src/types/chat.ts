@@ -8,7 +8,6 @@ export interface Source {
 export interface Message {
   role: Role
   content: string
-  sources?: Source[]
 }
 
 export interface HistoryEntry {

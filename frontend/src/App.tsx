@@ -37,10 +37,7 @@ function App() {
 
     try {
       const response = await askQuestion(question, history)
-      setMessages((prev) => [
-        ...prev,
-        { role: 'assistant', content: response.answer, sources: response.sources },
-      ])
+      setMessages((prev) => [...prev, { role: 'assistant', content: response.answer }])
       setHistory(response.history)
     } catch (err) {
       console.error('Failed to get response', err)

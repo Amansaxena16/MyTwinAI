@@ -18,22 +18,7 @@ function MessageList({ messages, loading = false }: MessageListProps) {
     <div className="message-list">
       {messages.map((message, index) => (
         <div key={index} className={`message message-${message.role}`}>
-          <div className="message-content">
-            <div className="message-bubble">{message.content}</div>
-            {message.sources && message.sources.length > 0 && (
-              <details className="message-sources">
-                <summary>Sources ({message.sources.length})</summary>
-                <ul>
-                  {message.sources.map((source, sourceIndex) => (
-                    <li key={sourceIndex}>
-                      <span className="source-doc-type">{source.doc_type ?? 'unknown'}</span>
-                      <p>{source.content}</p>
-                    </li>
-                  ))}
-                </ul>
-              </details>
-            )}
-          </div>
+          <div className="message-bubble">{message.content}</div>
         </div>
       ))}
       {loading && (
