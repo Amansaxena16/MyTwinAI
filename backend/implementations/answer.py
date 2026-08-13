@@ -128,16 +128,21 @@ TOTAL_CHUNKS = max(1, sum(len(chunks) for chunks in CHUNKS_BY_DOC_TYPE.values())
 
 
 def rank_source_files(question: str) -> list[str]:
-    """Order the knowledge base files by their best matching section."""
-    scored = vectorstore.similarity_search_with_relevance_scores(question, k=TOTAL_CHUNKS)
+    """Order the knowledge base files by their best matching section.
 
-    best_score: dict[str, float] = {}
-    for doc, score in scored:
+    Uses raw distances (lower is closer) rather than relevance scores, which
+    Chroma cannot keep inside 0-1 for this collection and which made LangChain
+    print a warning containing every chunk on every single question.
+    """
+    scored = vectorstore.similarity_search_with_score(question, k=TOTAL_CHUNKS)
+
+    closest: dict[str, float] = {}
+    for doc, distance in scored:
         doc_type = doc.metadata.get('doc_type')
-        if doc_type and score > best_score.get(doc_type, float('-inf')):
-            best_score[doc_type] = score
+        if doc_type and distance < closest.get(doc_type, float('inf')):
+            closest[doc_type] = distance
 
-    return [doc_type for doc_type, _ in sorted(best_score.items(), key=lambda item: -item[1])]
+    return [doc_type for doc_type, _ in sorted(closest.items(), key=lambda item: item[1])]
 
 
 def fetch_context(question: str) -> list[Document]:

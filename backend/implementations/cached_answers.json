@@ -2,5 +2,21 @@
   {
     "question": "What are your key skills?",
     "answer": "Aman's key skills include programming languages such as C, C++, Python, JavaScript, and TypeScript. He is also skilled in frameworks and libraries like React, Redux Toolkit, HTML, CSS, and Django. Additionally, Aman has experience with GenAI and machine learning tools, databases like PostgreSQL, and tools and platforms like Git, GitHub, and Linux. His soft skills include effective communication, adaptability, and being a quick learner."
+  },
+  {
+    "question": "Tell me about your work experience.",
+    "answer": "Aman has around two years of hands-on work experience in total, which includes approximately one and a half years as a Full Stack Developer at Einstellen.AI from February to July 2025, followed by internships spanning six months across three different companies: Codezin Technology Solutions (August to November 2023), Smile IT Solutions (July to October 2022). At each role, Aman was responsible for various backend and frontend development tasks. For instance, at Einstellen.AI, he designed a feature-level access control system using Django microservices along with React/TypeScript on the front end. He also built asynchronous interview workflows utilizing Celery and REST APIs to enhance responsiveness under concurrent loads. Additionally, Aman contributed by building reusable UI components in TypeScript and React leveraging Redux Toolkit for state management across the frontend application at Codezin Technology Solutions as an intern. At Smile IT Solutions, he focused on creating dynamic web pages using HTML, CSS with Bootstrap and Material UI frameworks to ensure design consistency while adding minimal JavaScript logic for interactivity purposes."
+  },
+  {
+    "question": "Why should we hire you?",
+    "answer": "I believe I am a strong fit for development roles due to my self-motivation and dedication towards work — traits that have helped me excel academically, which is also evident in the projects at Einstellen.AI where I've owned backend design across multiple microservices using Django and Kafka architecture while building real-time features with React/TypeScript frontend. My technical depth combined with adaptability makes a valuable addition to any team."
+  },
+  {
+    "question": "What projects have you built?",
+    "answer": "- Owned backend design across multiple microservices for Einstellen.AI’s AI-driven hiring platform using Django and Redis with RBAC access control, asynchronous workflows via Celery/REST APIs, reusable UI components in TypeScript & React powered by Redux Toolkit (RTK).\n- Developed dynamic scalable web applications at Codezin Technology Solutions focusing on revamping interactive website features."
+  },
+  {
+    "question": "Who is Aman Saxena?",
+    "answer": "Aman Saxena is a Full Stack Software Developer based in Noida, India. He has hands-on experience building scalable, event-driven systems for AI-powered products and holds roles as both Frontend and Backend Engineer at Einstellen.AI where he worked on an AI-driven hiring platform using Django microservices architecture among other responsibilities like designing RBAC access control system across services, building asynchronous interview workflows with Celery for better performance under concurrent load etc. He also has experience as a Full Stack Developer Intern at Codezin Technology Solutions and Web Developer Intern at Smile IT Solutions where he worked on developing dynamic web applications using Django, HTML, JavaScript alongwith designing UI components focusing primarily on clean layouts with Bootstrap for speedy development while maintaining visual consistency across pages. Aman has a passion for solving backend and system design problems like idempotent message processing, distributed rate limiting etc., he is currently working as an intern at GenAI Learning Course – Udemy where his role involves building personal portfolio assistant using Django REST Framework along with React frontend which answers questions about Aman's background, skills, and experience by retrieving from his own profile data. He also has a certification in 'GenAI Learning Course - Udemy'."
   }
 ]
