@@ -1,7 +1,9 @@
+import json
 import os
 from collections import defaultdict
 from collections.abc import Iterator
 
+import numpy as np
 from dotenv import load_dotenv
 from langchain_chroma import Chroma
 from langchain_core.documents import Document
@@ -16,6 +18,14 @@ if not my_api_key:
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DB_NAME = os.path.join(BASE_DIR, 'vector_db')
+CACHE_PATH = os.path.join(BASE_DIR, 'cached_answers.json')
+
+# How close a question must be to a cached one to reuse its answer.
+# Deliberately strict. Wording variants of the same question score 0.98+, but
+# genuinely different questions can still score ~0.73 with this embedding model
+# ("What skills does he have?" lands closest to "What are his strengths?"), and
+# serving a recruiter the wrong cached answer is worse than spending tokens.
+CACHE_HIT_THRESHOLD = 0.95
 
 model = 'llama-3.3-70b-versatile'
 # How many knowledge base files a single answer may draw on.
@@ -128,6 +138,51 @@ def fetch_context(question: str) -> list[Document]:
     return context
 
 
+def load_answer_cache() -> tuple[list[str], list[str], np.ndarray | None]:
+    """Pre-generated answers for the questions recruiters ask most.
+
+    Serving these costs no LLM tokens, which is what keeps the app inside the
+    Groq free tier when several people use it on the same day.
+    """
+    if not os.path.exists(CACHE_PATH):
+        return [], [], None
+
+    with open(CACHE_PATH, encoding='utf-8') as cache_file:
+        entries = json.load(cache_file)
+
+    questions = [entry['question'] for entry in entries]
+    answers = [entry['answer'] for entry in entries]
+    if not questions:
+        return [], [], None
+
+    # Normalised so a dot product is the cosine similarity.
+    vectors = np.array(embeddings.embed_documents(questions), dtype=np.float32)
+    vectors /= np.linalg.norm(vectors, axis=1, keepdims=True)
+    return questions, answers, vectors
+
+
+CACHED_QUESTIONS, CACHED_ANSWERS, CACHED_VECTORS = load_answer_cache()
+
+
+def lookup_cached_answer(question: str, history: list[dict]) -> str | None:
+    """Return a pre-generated answer for this question, if one is close enough.
+
+    Only used to open a conversation. Once there is history the answer may need
+    to refer back to it, so the cache is skipped.
+    """
+    if CACHED_VECTORS is None or history:
+        return None
+
+    asked = np.array(embeddings.embed_query(question), dtype=np.float32)
+    asked /= np.linalg.norm(asked)
+
+    similarities = CACHED_VECTORS @ asked
+    best = int(np.argmax(similarities))
+    if similarities[best] < CACHE_HIT_THRESHOLD:
+        return None
+    return CACHED_ANSWERS[best]
+
+
 def build_messages(question: str, history: list[dict]) -> tuple[list[BaseMessage], list[Document]]:
     docs = fetch_context(question)
     context = '\n\n'.join(doc.page_content for doc in docs)
@@ -138,15 +193,34 @@ def build_messages(question: str, history: list[dict]) -> tuple[list[BaseMessage
     return messages, docs
 
 
-def answer_question(question: str, history: list[dict] | None = None) -> tuple[str, list[Document]]:
-    messages, docs = build_messages(question, history or [])
+def answer_question(
+    question: str, history: list[dict] | None = None, use_cache: bool = True
+) -> tuple[str, list[Document]]:
+    history = history or []
+    if use_cache:
+        cached = lookup_cached_answer(question, history)
+        if cached is not None:
+            return cached, []
+
+    messages, docs = build_messages(question, history)
     response = llm.invoke(messages)
     return response.content, docs
 
 
 def stream_answer(question: str, history: list[dict] | None = None) -> Iterator[str]:
-    """Yield the answer token by token as Groq produces it."""
-    messages, _ = build_messages(question, history or [])
+    """Yield the answer token by token as Groq produces it.
+
+    A cached answer is replayed word by word so it still reads as a live reply.
+    """
+    history = history or []
+
+    cached = lookup_cached_answer(question, history)
+    if cached is not None:
+        for word in cached.split(' '):
+            yield word + ' '
+        return
+
+    messages, _ = build_messages(question, history)
     for chunk in llm.stream(messages):
         if chunk.content:
             yield chunk.content

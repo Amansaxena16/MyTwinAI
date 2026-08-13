@@ -5,7 +5,7 @@
 Aman has around 2 years of hands-on work experience in total.
 
 This is roughly 1.5 years as a full-time Full Stack Developer at Einstellen.AI,
-plus about 4 months across two internships.
+plus about 6 months across two internships.
 
 His experience is not one continuous stretch: there are study gaps between the
 roles below. Counting from the start of his first internship to the end of his
@@ -32,7 +32,7 @@ Technologies used: Django, React, TypeScript, Redux Toolkit, Redis, Celery, Kafk
 
 ## Codezin Technology Solutions — Full Stack Developer Intern
 
-Duration: Aug 2023 – Oct 2023
+Duration: Aug 2023 – Nov 2023
 Location: Kolkata, India
 
 Developed dynamic, scalable web applications.
@@ -46,7 +46,7 @@ Technologies used: Django, HTML, JavaScript
 
 ## Smile IT Solutions — Web Developer Intern
 
-Duration: Aug 2022 – Oct 2022
+Duration: Aug 2022 – Nov 2022
 Location: Noida, India
 
 Built and designed web pages and websites, focusing primarily on HTML and CSS, with UI component design and light JavaScript logic.
