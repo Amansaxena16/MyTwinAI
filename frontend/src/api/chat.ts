@@ -6,6 +6,7 @@ export interface AskResponse {
   answer: string
   sources: Source[]
   history: HistoryEntry[]
+  follow_ups: string[]
 }
 
 export async function askQuestion(
@@ -27,11 +28,13 @@ export async function askQuestion(
 
 /**
  * Streams the answer over SSE, calling onToken for each chunk as it arrives.
+ * onFollowUps fires once at the end, with the questions to offer next.
  */
 export async function streamQuestion(
   question: string,
   history: HistoryEntry[],
   onToken: (token: string) => void,
+  onFollowUps?: (questions: string[]) => void,
 ): Promise<void> {
   const response = await fetch(`${API_BASE_URL}/api/chat/stream/`, {
     method: 'POST',
@@ -65,6 +68,7 @@ export async function streamQuestion(
       if (payload.error) throw new Error(payload.error)
       if (payload.done) return
       if (payload.token) onToken(payload.token)
+      if (payload.follow_ups) onFollowUps?.(payload.follow_ups)
     }
   }
 }

@@ -1,74 +1,74 @@
 [
   {
     "question": "What are your key skills?",
-    "answer": "Aman's key skills include programming languages such as C, C++, Python, JavaScript, and TypeScript. He is also skilled in frameworks and libraries like React, Redux Toolkit, HTML, CSS, and Tailwind CSS. Additionally, Aman has experience with GenAI and machine learning tools, databases like PostgreSQL and SQL, and tools and platforms like Git, GitHub, and Linux. His soft skills include effective communication, adaptability, and being a quick learner."
+    "answer": "Aman is a Full Stack Developer whose strongest areas are backend and system design, with a growing focus on GenAI.\n\n- **Languages** — C, C++, Python, JavaScript, TypeScript\n- **Frameworks** — Django, FastAPI, Flask, React, Redux Toolkit, Tailwind CSS\n- **GenAI and ML** — LangChain, RAG, Chroma, HuggingFace Embeddings, Groq, Gradio, LLM-as-judge evaluation\n- **Databases** — PostgreSQL, SQL, materialized views, query optimisation, indexing\n- **Tools and platforms** — Git, GitHub, Postman, Linux, Celery, Kafka, Redis, WebSocket\n- **Soft skills** — effective communication, adaptability, quick learner, calm under pressure, self-motivated"
   },
   {
     "question": "Tell me about your work experience.",
-    "answer": "Aman has around 2 years of hands-on work experience. He worked as a full-time Full Stack Developer at Einstellen.AI for about 1.5 years, and he also completed two internships that lasted around 6 months in total. His experience includes roles at Einstellen.AI, Codezin Technology Solutions, and Smile IT Solutions, where he worked on various projects and technologies such as Django, React, TypeScript, and PostgreSQL."
+    "answer": "Aman has around **2 years** of hands-on experience — roughly 1.5 years full-time plus about 6 months across two internships.\n\n- **Einstellen.AI** — Full Stack Developer. Owned backend design across multiple microservices for an AI-driven hiring platform, covering RBAC access control, real-time features and event-driven systems.\n- **Codezin Technology Solutions** — Internship.\n- **Smile IT Solutions** — Internship.\n\nHis day-to-day stack has been Django, React, TypeScript and PostgreSQL."
   },
   {
     "question": "Why should we hire you?",
-    "answer": "Aman believes he's a strong fit for development roles because he's self-motivated and puts his full effort into whatever he's working on. He brings a mix of technical depth and adaptability to any team he joins, as seen in his experience at Einstellen.AI, where he owned backend design across multiple microservices and worked on various features, including access control, real-time features, and event-driven systems."
+    "answer": "Aman is self-motivated and puts his full effort into whatever he is working on, bringing a mix of technical depth and adaptability to a team.\n\n- **Owns real scope** — at Einstellen.AI he owned backend design across 4 microservices, not just isolated tickets.\n- **Builds the hard parts** — access control, real-time features and event-driven systems.\n- **Keeps learning** — moved into GenAI on his own and shipped working RAG applications.\n\nHe is a strong fit for backend or full stack roles where system design matters."
   },
   {
     "question": "What projects have you built?",
-    "answer": "Aman has built several projects, including:\n* Multi-Channel Notification Fan-Out System: an event-driven notification system that fans out a single business event to Email, SMS, and Push channels via Kafka topics and independent Celery workers.\n* RAG_Chat_App: a full-stack RAG (Retrieval-Augmented Generation) chatbot that answers company-specific questions using a custom knowledge base, with a Django REST backend and a React frontend.\n* MyTwinAI: an AI-powered personal portfolio assistant (this project) that answers questions about Aman's background, skills, and experience by retrieving from his own profile data."
+    "answer": "Aman has built three main projects:\n\n- **[Multi-Channel Notification Fan-Out System](https://github.com/Amansaxena16/Notification-System)** — an event-driven system that fans one business event out to Email, SMS and Push through Kafka topics and independent Celery workers, so one channel failing does not block the rest.\n- **[RAG_Chat_App](https://github.com/Amansaxena16/RAG_Chat_App)** — a full-stack RAG chatbot answering company-specific questions from a custom knowledge base, with a Django REST backend, a React frontend and a 30-question evaluation set.\n- **[MyTwinAI](https://github.com/Amansaxena16/MyTwinAI)** — this project. An AI portfolio assistant that answers questions about his background from his own profile data."
   },
   {
     "question": "Who is Aman Saxena?",
-    "answer": "Aman Saxena is a Full Stack Software Developer based in Noida, India. He has hands-on experience building scalable, event-driven systems for AI-powered products, and enjoys solving backend and system design problems."
+    "answer": "Aman Saxena is a **Full Stack Software Developer** based in Noida, India.\n\nHe has hands-on experience building scalable, event-driven systems for AI-powered products, and enjoys solving backend and system design problems."
   },
   {
     "question": "How much total experience does Aman have?",
-    "answer": "Aman has around 2 years of hands-on work experience in total. This is roughly 1.5 years as a full-time Full Stack Developer at Einstellen.AI, plus about 6 months across two internships."
+    "answer": "Aman has around **2 years** of hands-on work experience in total.\n\n- **~1.5 years** full-time as a Full Stack Developer at Einstellen.AI\n- **~6 months** across two internships"
   },
   {
     "question": "What is his educational background?",
-    "answer": "Aman's educational background includes a Master of Computer Applications (MCA) from GL Bajaj Institute of Technology, AKTU University, a Bachelor of Computer Applications (BCA) from Institute of Management and Research, CCS University, as well as a Senior Secondary (12th) and High School (10th) education from International Centre English School and Shree Sanatan Dharm Education Centre, respectively. His scores are 75% for MCA, 65% for BCA, 63% for 12th, and 59% for 10th."
+    "answer": "Aman holds a Master of Computer Applications, completed in 2025.\n\n- **MCA** — GL Bajaj Institute of Technology, AKTU University, Greater Noida · 2023–2025 · 75%\n- **BCA** — Institute of Management and Research, CCS University, Ghaziabad · 2020–2023 · 65%\n- **Senior Secondary (12th), CBSE** — International Centre English School, Kanpur · 2018–2020 · 63%\n- **High School (10th), CBSE** — Shree Sanatan Dharm Education Centre, Kanpur · 2017–2018 · 59%"
   },
   {
     "question": "What programming languages does he know?",
-    "answer": "Aman knows the following programming languages: C, C++, Python, JavaScript, and TypeScript."
+    "answer": "Aman works in five languages:\n\n- **C**\n- **C++**\n- **Python**\n- **JavaScript**\n- **TypeScript**"
   },
   {
     "question": "What AI and GenAI tools has he worked with?",
-    "answer": "Aman has worked with several GenAI and Machine Learning tools, including LangChain, RAG (Retrieval-Augmented Generation), Chroma (Vector Database), HuggingFace Embeddings, Groq (LLM Inference), Gradio, and LLM-as-judge Evaluation. He is also diving into GenAI to build AI-driven applications."
+    "answer": "Aman has built AI-driven applications with:\n\n- **LangChain** — orchestrating LLM calls\n- **RAG** — Retrieval-Augmented Generation\n- **Chroma** — vector database\n- **HuggingFace Embeddings** — turning text into vectors\n- **Groq** — LLM inference\n- **Gradio** — quick interfaces\n- **LLM-as-judge evaluation** — scoring answer accuracy\n\nHis RAG_Chat_App and MyTwinAI projects both use this stack end to end."
   },
   {
     "question": "What databases has he worked with?",
-    "answer": "Aman has worked with PostgreSQL and SQL, including materialized views, query optimization, and indexing."
+    "answer": "Aman has worked with **PostgreSQL** and **SQL**.\n\nThat includes materialized views, query optimisation and indexing — for example, a PostgreSQL schema with a materialized view tracking per-channel delivery success rates in his notification system."
   },
   {
     "question": "Where is he based?",
-    "answer": "Aman Saxena is based in Noida, India."
+    "answer": "Aman is based in **Noida, India**."
   },
   {
     "question": "How can I contact him?",
-    "answer": "You can contact Aman Saxena through his email at aman16nov.as@gmail.com, or connect with him on LinkedIn at https://www.linkedin.com/in/aman-saxena-16nov/. He is also available on GitHub at https://github.com/Amansaxena16 and LeetCode at https://leetcode.com/u/Amansaxena16/."
+    "answer": "You can reach Aman here:\n\n- **Email** — [aman16nov.as@gmail.com](mailto:aman16nov.as@gmail.com)\n- **LinkedIn** — [aman-saxena-16nov](https://www.linkedin.com/in/aman-saxena-16nov/)\n- **GitHub** — [Amansaxena16](https://github.com/Amansaxena16)\n- **LeetCode** — [Amansaxena16](https://leetcode.com/u/Amansaxena16/)"
   },
   {
     "question": "What are his strengths?",
-    "answer": "Aman's key strengths are effective communication and staying calm under pressure, which help him handle challenges well. He is also a quick learner and adapts easily to new situations."
+    "answer": "Aman's main strengths are:\n\n- **Effective communication** — explains his work clearly\n- **Calm under pressure** — handles challenges without losing his footing\n- **Quick learner** — picks up new tools and adapts easily\n- **Self-motivated** — drives his own work forward"
   },
   {
     "question": "What are his weaknesses?",
-    "answer": "Aman's weaknesses include sometimes focusing too much on small details, which can delay his final decision-making. He is actively working on finding the right balance between thoroughness and speed."
+    "answer": "Aman sometimes focuses too much on small details, which can slow down his final decision-making.\n\nHe is actively working on finding the right balance between being thorough and moving quickly."
   },
   {
     "question": "Where does he see himself in 5 years?",
-    "answer": "Aman sees himself building management skills alongside his technical role in the next few years, so he can grow both as an engineer and as a leader."
+    "answer": "Aman wants to build **management skills alongside his technical role**, so he can grow both as an engineer and as a leader."
   },
   {
     "question": "Tell me about MyTwinAI.",
-    "answer": "MyTwinAI is an AI-powered personal portfolio assistant that Aman built to answer questions about his background, skills, and experience. It retrieves information from his own profile data, allowing recruiters or visitors to get accurate and specific answers about his experience. The project uses a similar RAG architecture to his RAG_Chat_App, but is applied to structured personal data instead of plain documents. The key features of MyTwinAI include a RAG pipeline and the ability to answer questions about experience, skills, projects, and FAQs that a recruiter would typically ask."
+    "answer": "**MyTwinAI** is the assistant you are talking to right now — an AI portfolio assistant Aman built to answer questions about his background, skills and experience.\n\n- Retrieves answers from his own profile data rather than general knowledge, so replies stay accurate and specific.\n- Uses the same RAG architecture as his RAG_Chat_App, applied to structured personal data instead of plain documents.\n- Covers the experience, skills, projects and FAQ questions a recruiter would usually ask.\n\nThe code is on [GitHub](https://github.com/Amansaxena16/MyTwinAI)."
   },
   {
     "question": "What certifications does he have?",
-    "answer": "Aman has a certification in the GenAI Learning Course from Udemy."
+    "answer": "Aman has completed the **GenAI Learning Course** from Udemy."
   },
   {
     "question": "What are his achievements?",
-    "answer": "Aman has achieved a few notable things, including winning 1st position in a singing competition. He has also completed a GenAI Learning Course on Udemy. Additionally, his projects, such as the Multi-Channel Notification Fan-Out System and RAG_Chat_App, demonstrate his skills and accomplishments as a Full Stack Software Developer."
+    "answer": "A few things Aman is proud of:\n\n- **1st position in a singing competition**\n- **GenAI Learning Course** completed on Udemy\n- **Multi-Channel Notification Fan-Out System** — an event-driven system built with Kafka and Celery\n- **RAG_Chat_App** — a full-stack RAG chatbot with its own evaluation suite\n\nOutside work he enjoys singing and playing the guitar."
   }
 ]

@@ -8,9 +8,15 @@ interface MessageListProps {
   messages: Message[]
   loading?: boolean
   onRegenerate?: () => void
+  onSuggestionClick?: (question: string) => void
 }
 
-function MessageList({ messages, loading = false, onRegenerate }: MessageListProps) {
+function MessageList({
+  messages,
+  loading = false,
+  onRegenerate,
+  onSuggestionClick,
+}: MessageListProps) {
   const bottomRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -67,11 +73,43 @@ function MessageList({ messages, loading = false, onRegenerate }: MessageListPro
                     onRegenerate={isLast ? onRegenerate : undefined}
                   />
                 )}
+                {/* Only under the newest answer: older ones have been answered past. */}
+                {isLast && !loading && message.followUps && message.followUps.length > 0 && (
+                  <FollowUps questions={message.followUps} onSelect={onSuggestionClick} />
+                )}
               </div>
             </div>
           )
         })}
         <div ref={bottomRef} />
+      </div>
+    </div>
+  )
+}
+
+interface FollowUpsProps {
+  questions: string[]
+  onSelect?: (question: string) => void
+}
+
+function FollowUps({ questions, onSelect }: FollowUpsProps) {
+  if (!onSelect) return null
+
+  return (
+    <div className="follow-ups">
+      <span className="follow-ups-label">Ask next</span>
+      <div className="follow-ups-list">
+        {questions.map((question) => (
+          <button
+            key={question}
+            type="button"
+            className="follow-up"
+            onClick={() => onSelect(question)}
+          >
+            {question}
+            <ArrowIcon />
+          </button>
+        ))}
       </div>
     </div>
   )
@@ -147,6 +185,20 @@ function CheckIcon() {
         d="m2.5 7.5 3 3 6-7"
         stroke="currentColor"
         strokeWidth="1.6"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  )
+}
+
+function ArrowIcon() {
+  return (
+    <svg className="follow-up-arrow" width="13" height="13" viewBox="0 0 14 14" fill="none">
+      <path
+        d="M3 7h8M7.5 3.5 11 7l-3.5 3.5"
+        stroke="currentColor"
+        strokeWidth="1.4"
         strokeLinecap="round"
         strokeLinejoin="round"
       />

@@ -12,6 +12,8 @@ from langchain_groq import ChatGroq
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_ollama import ChatOllama
 
+from .common_questions import DEFAULT_FOLLOW_UPS, FOLLOW_UPS
+
 load_dotenv()
 
 # 'groq' for the deployed app, 'ollama' to test locally without spending tokens.
@@ -190,12 +192,27 @@ CACHED_ANSWERS = load_answer_cache()
 def lookup_cached_answer(question: str, history: list[dict]) -> str | None:
     """Return the pre-generated answer for this question, if there is one.
 
-    Only used to open a conversation. Once there is history the answer may need
-    to refer back to it, so the cache is skipped.
+    History is deliberately ignored. An exact match is one of our own written
+    questions, and those are all self contained - "What projects have you
+    built?" means the same thing as the fifth message as it does as the first.
+    Matching on paraphrases could not make that claim, which is why the cache
+    used to be limited to the opening message. It matters because the follow up
+    chips are clicked mid conversation, and they are the free path.
     """
-    if history:
-        return None
     return CACHED_ANSWERS.get(cache_key(question))
+
+
+def follow_ups_for(question: str) -> list[str]:
+    """Three questions to offer as the next click.
+
+    Never offers the question that was just asked, which happens when a visitor
+    types something close to one of the defaults.
+    """
+    asked = cache_key(question)
+    for known, suggestions in FOLLOW_UPS.items():
+        if cache_key(known) == asked:
+            return suggestions
+    return [q for q in DEFAULT_FOLLOW_UPS if cache_key(q) != asked][:3]
 
 
 def build_messages(question: str, history: list[dict]) -> tuple[list[BaseMessage], list[Document]]:

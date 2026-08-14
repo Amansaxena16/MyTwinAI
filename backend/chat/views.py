@@ -6,7 +6,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 
-from implementations.answer import answer_question, stream_answer
+from implementations.answer import answer_question, follow_ups_for, stream_answer
 
 logger = logging.getLogger(__name__)
 
@@ -31,7 +31,12 @@ class AskLLM(APIView):
         ]
 
         return Response(
-            {'answer': answer, 'sources': sources, 'history': history},
+            {
+                'answer': answer,
+                'sources': sources,
+                'history': history,
+                'follow_ups': follow_ups_for(question),
+            },
             status=status.HTTP_200_OK,
         )
 
@@ -50,6 +55,8 @@ class AskLLMStream(APIView):
             try:
                 for token in stream_answer(question, history):
                     yield f'data: {json.dumps({"token": token})}\n\n'
+                # After the answer, so the chips appear once it has finished.
+                yield f'data: {json.dumps({"follow_ups": follow_ups_for(question)})}\n\n'
             except Exception:
                 logger.exception('Streaming the answer failed')
                 yield f'data: {json.dumps({"error": "Could not generate an answer."})}\n\n'

@@ -8,6 +8,8 @@ export interface Source {
 export interface Message {
   role: Role
   content: string
+  /** Questions to offer as the next click. Assistant messages only. */
+  followUps?: string[]
 }
 
 export interface HistoryEntry {

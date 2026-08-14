@@ -1,8 +1,8 @@
 """Generate the answers for COMMON_QUESTIONS once, so serving them is free.
 
-Run after changing the knowledge base:
+Run after changing the knowledge base, from the backend directory:
 
-    python implementations/warm_cache.py
+    python -m implementations.warm_cache
 
 Existing answers are kept, so a run interrupted by the Groq rate limit can be
 resumed later and will only ask for the ones still missing.
@@ -13,8 +13,8 @@ import os
 import sys
 import time
 
-from answer import CACHE_PATH, answer_question
-from common_questions import COMMON_QUESTIONS
+from .answer import CACHE_PATH, answer_question
+from .common_questions import COMMON_QUESTIONS
 
 # Ollama unloads an idle model and drops the connection while it reloads, which
 # is a blip rather than a real failure. A rate limit is not worth retrying.
