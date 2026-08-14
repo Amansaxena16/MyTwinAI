@@ -12,7 +12,7 @@ from langchain_groq import ChatGroq
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_ollama import ChatOllama
 
-from .common_questions import DEFAULT_FOLLOW_UPS, FOLLOW_UPS
+from .common_questions import COMMON_QUESTIONS, DEFAULT_FOLLOW_UPS, FOLLOW_UPS
 
 load_dotenv()
 
@@ -209,17 +209,35 @@ def lookup_cached_answer(question: str, history: list[dict]) -> str | None:
     return CACHED_ANSWERS.get(cache_key(question))
 
 
-def follow_ups_for(question: str) -> list[str]:
-    """Three questions to offer as the next click.
+FOLLOW_UP_COUNT = 3
 
-    Never offers the question that was just asked, which happens when a visitor
-    types something close to one of the defaults.
+
+def follow_ups_for(question: str, history: list[dict] | None = None) -> list[str]:
+    """Three questions to offer as the next click, none of them already asked.
+
+    Suggesting a question whose answer is further up the page wastes one of
+    only three slots, so everything the visitor has asked is filtered out -
+    not just the current question. Filtering can empty the hand written list,
+    so the rest of the common questions top it back up to three.
     """
-    asked = cache_key(question)
-    for known, suggestions in FOLLOW_UPS.items():
-        if cache_key(known) == asked:
-            return suggestions
-    return [q for q in DEFAULT_FOLLOW_UPS if cache_key(q) != asked][:3]
+    already_asked = {cache_key(question)}
+    for entry in history or []:
+        if entry.get('role') == 'user':
+            already_asked.add(cache_key(entry.get('content', '')))
+
+    suggestions = next(
+        (v for k, v in FOLLOW_UPS.items() if cache_key(k) == cache_key(question)),
+        DEFAULT_FOLLOW_UPS,
+    )
+
+    chosen = [q for q in suggestions if cache_key(q) not in already_asked]
+    for question_ in COMMON_QUESTIONS:
+        if len(chosen) >= FOLLOW_UP_COUNT:
+            break
+        if cache_key(question_) not in already_asked and question_ not in chosen:
+            chosen.append(question_)
+
+    return chosen[:FOLLOW_UP_COUNT]
 
 
 def build_messages(question: str, history: list[dict]) -> tuple[list[BaseMessage], list[Document]]:

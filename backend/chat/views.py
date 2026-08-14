@@ -16,12 +16,13 @@ logger = logging.getLogger(__name__)
 GENERIC_ERROR = 'Could not generate an answer.'
 
 
-def rate_limit_message(exc: RateLimitError) -> str:
+def rate_limit_message(exc: RateLimitError, has_follow_ups: bool = False) -> str:
     """Say how long the wait is, rather than leaving the visitor guessing.
 
     The daily token allowance is a rolling 24 hour window, so the wait is
     usually minutes rather than "tomorrow". Groq puts it in the message as
-    "Please try again in 36m15.552s".
+    "Please try again in 36m15.552s". Only points at the suggestions when
+    there are some left to point at.
     """
     match = re.search(r'try again in (?:(\d+)m)?([\d.]+)s', str(exc))
     if not match:
@@ -29,10 +30,10 @@ def rate_limit_message(exc: RateLimitError) -> str:
 
     minutes = int(match.group(1) or 0) + math.ceil(float(match.group(2)) / 60)
     when = 'a minute' if minutes <= 1 else f'about {minutes} minutes'
-    return (
-        f'I have hit my daily question limit and it resets in {when}. '
-        'The suggested questions below still work in the meantime.'
-    )
+    message = f'I have hit my daily question limit and it resets in {when}.'
+    if has_follow_ups:
+        message += ' The suggested questions below still work in the meantime.'
+    return message
 
 
 class AskLLM(APIView):
@@ -48,8 +49,9 @@ class AskLLM(APIView):
             answer, docs = answer_question(question, history)
         except RateLimitError as exc:
             logger.warning('Groq rate limit reached: %s', exc)
+            follow_ups = follow_ups_for(question, history)
             return Response(
-                {'error': rate_limit_message(exc), 'follow_ups': follow_ups_for(question)},
+                {'error': rate_limit_message(exc, bool(follow_ups)), 'follow_ups': follow_ups},
                 status=status.HTTP_429_TOO_MANY_REQUESTS,
             )
 
@@ -66,7 +68,7 @@ class AskLLM(APIView):
                 'answer': answer,
                 'sources': sources,
                 'history': history,
-                'follow_ups': follow_ups_for(question),
+                'follow_ups': follow_ups_for(question, history),
             },
             status=status.HTTP_200_OK,
         )
@@ -87,17 +89,21 @@ class AskLLMStream(APIView):
                 for token in stream_answer(question, history):
                     yield f'data: {json.dumps({"token": token})}\n\n'
                 # After the answer, so the chips appear once it has finished.
-                yield f'data: {json.dumps({"follow_ups": follow_ups_for(question)})}\n\n'
+                yield f'data: {json.dumps({"follow_ups": follow_ups_for(question, history)})}\n\n'
             # Errors carry the chips too. They are cached answers, so they work
             # when nothing else does, and an error saying "try the suggestions
             # below" needs there to be suggestions below.
             except RateLimitError as exc:
                 logger.warning('Groq rate limit reached: %s', exc)
-                payload = {'error': rate_limit_message(exc), 'follow_ups': follow_ups_for(question)}
+                follow_ups = follow_ups_for(question, history)
+                payload = {
+                    'error': rate_limit_message(exc, bool(follow_ups)),
+                    'follow_ups': follow_ups,
+                }
                 yield f'data: {json.dumps(payload)}\n\n'
             except Exception:
                 logger.exception('Streaming the answer failed')
-                payload = {'error': GENERIC_ERROR, 'follow_ups': follow_ups_for(question)}
+                payload = {'error': GENERIC_ERROR, 'follow_ups': follow_ups_for(question, history)}
                 yield f'data: {json.dumps(payload)}\n\n'
             yield f'data: {json.dumps({"done": True})}\n\n'
 
