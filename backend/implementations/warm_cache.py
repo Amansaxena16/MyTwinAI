@@ -11,9 +11,33 @@ resumed later and will only ask for the ones still missing.
 import json
 import os
 import sys
+import time
 
 from answer import CACHE_PATH, answer_question
 from common_questions import COMMON_QUESTIONS
+
+# Ollama unloads an idle model and drops the connection while it reloads, which
+# is a blip rather than a real failure. A rate limit is not worth retrying.
+RETRIES = 2
+RETRY_WAIT_SECONDS = 5
+
+
+def is_worth_retrying(exc: Exception) -> bool:
+    return 'rate limit' not in str(exc).lower()
+
+
+def generate(question: str) -> str:
+    for attempt in range(RETRIES + 1):
+        try:
+            # use_cache=False so warming never reads back its own answers.
+            answer, _ = answer_question(question, use_cache=False)
+            return answer
+        except Exception as exc:
+            if attempt == RETRIES or not is_worth_retrying(exc):
+                raise
+            print(f'  retrying after: {exc}')
+            time.sleep(RETRY_WAIT_SECONDS)
+    raise RuntimeError('unreachable')
 
 
 def load_existing() -> dict[str, str]:
@@ -44,8 +68,7 @@ def main() -> int:
     print(f'{len(answers)} cached, generating {len(missing)}...')
     for question in missing:
         try:
-            # use_cache=False so warming never reads back its own answers.
-            answer, _ = answer_question(question, use_cache=False)
+            answer = generate(question)
         except Exception as exc:
             # Almost always the Groq daily token limit. Keep what we have.
             save(answers)
