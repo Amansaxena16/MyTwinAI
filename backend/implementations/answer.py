@@ -1,10 +1,12 @@
 import json
+import logging
 import os
 import re
 from collections import defaultdict
 from collections.abc import Iterator
 
 from dotenv import load_dotenv
+from groq import RateLimitError
 from langchain_chroma import Chroma
 from langchain_core.documents import Document
 from langchain_core.messages import BaseMessage, HumanMessage, SystemMessage, convert_to_messages
@@ -16,15 +18,19 @@ from .common_questions import COMMON_QUESTIONS, DEFAULT_FOLLOW_UPS, FOLLOW_UPS
 
 load_dotenv()
 
+logger = logging.getLogger(__name__)
+
 # 'groq' for the deployed app, 'ollama' to test locally without spending tokens.
 LLM_PROVIDER = os.getenv('llm_provider', 'groq').lower()
 
 # Both Groq models are free; the free allowance is what differs. 70b answers
 # better but stops after 100,000 tokens a day, which is about 34 typed
-# questions. 8b is a little weaker and allows 14x the daily requests. Changing
-# this does not make a question cheaper - the prompt and knowledge base are
-# most of it either way - it changes how many questions a day fit.
+# questions. 8b is a little weaker and allows far more. Rather than choosing,
+# the good model runs until its allowance is gone and the roomy one takes over,
+# so the site degrades in quality instead of breaking. Set the fallback empty
+# to turn this off.
 GROQ_MODEL = os.getenv('groq_model', 'llama-3.3-70b-versatile')
+GROQ_FALLBACK_MODEL = os.getenv('groq_fallback_model', 'llama-3.1-8b-instant')
 
 # A hard ceiling on the answer, enforced by the provider rather than asked for
 # in the prompt. "Keep it short" is only advice, and the model talks itself out
@@ -121,7 +127,7 @@ directly if you would like to know more.
 vectorstore = Chroma(embedding_function=embeddings, persist_directory=DB_NAME)
 
 
-def build_llm():
+def build_llm(groq_model: str = ''):
     """Groq in production, Ollama for local testing so no tokens are spent."""
     if LLM_PROVIDER == 'ollama':
         return ChatOllama(
@@ -136,13 +142,32 @@ def build_llm():
         raise ValueError('Could not find Groq API Key')
     return ChatGroq(
         temperature=0,
-        model_name=GROQ_MODEL,
+        model_name=groq_model or GROQ_MODEL,
         groq_api_key=api_key,
         max_tokens=MAX_ANSWER_TOKENS,
     )
 
 
-llm = build_llm()
+def build_llm_chain() -> list:
+    """The models to try in order, best first.
+
+    Only Groq has a second model to fall back to, and only when it is a
+    different one from the first.
+    """
+    chain = [build_llm()]
+    if LLM_PROVIDER != 'ollama' and GROQ_FALLBACK_MODEL and GROQ_FALLBACK_MODEL != GROQ_MODEL:
+        chain.append(build_llm(GROQ_FALLBACK_MODEL))
+    return chain
+
+
+LLM_CHAIN = build_llm_chain()
+# The model used first. Kept for anything that only needs the one.
+llm = LLM_CHAIN[0]
+
+
+def model_name_of(model) -> str:
+    """The model's name, whichever provider it came from."""
+    return getattr(model, 'model_name', None) or getattr(model, 'model', '?')
 
 
 def load_chunks_by_doc_type() -> dict[str, list[Document]]:
@@ -293,8 +318,16 @@ def answer_question(
             return cached, []
 
     messages, docs = build_messages(question, history)
-    response = llm.invoke(messages)
-    return response.content, docs
+
+    for index, model in enumerate(LLM_CHAIN):
+        try:
+            return model.invoke(messages).content, docs
+        except RateLimitError:
+            if index == len(LLM_CHAIN) - 1:
+                raise
+            logger.warning('%s is out of tokens, falling back', model_name_of(model))
+
+    raise RuntimeError('unreachable')
 
 
 def stream_answer(question: str, history: list[dict] | None = None) -> Iterator[str]:
@@ -311,6 +344,32 @@ def stream_answer(question: str, history: list[dict] | None = None) -> Iterator[
         return
 
     messages, _ = build_messages(question, history)
-    for chunk in llm.stream(messages):
-        if chunk.content:
-            yield chunk.content
+
+    for index, model in enumerate(LLM_CHAIN):
+        try:
+            yield from stream_from(model, messages)
+            return
+        except RateLimitError:
+            if index == len(LLM_CHAIN) - 1:
+                raise
+            logger.warning('%s is out of tokens, falling back', model_name_of(model))
+
+
+def stream_from(model, messages: list[BaseMessage]) -> Iterator[str]:
+    """Stream one model's answer, refusing to fall back once it has started.
+
+    A rate limit is raised when the request is made, before any token arrives,
+    so switching models is invisible. If one somehow surfaced mid answer, the
+    visitor would see the start of one answer followed by the whole of another,
+    which is worse than the error.
+    """
+    started = False
+    try:
+        for chunk in model.stream(messages):
+            if chunk.content:
+                started = True
+                yield chunk.content
+    except RateLimitError:
+        if started:
+            raise RuntimeError('rate limited part way through an answer')
+        raise
