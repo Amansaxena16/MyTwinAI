@@ -2,5 +2,8 @@
 .env
 __pycache__/
 *.pyc
-backend/implementations/vector_db/
 backend/db.sqlite3
+
+# vector_db is committed on purpose. It is small, and shipping it means the
+# host never has to run ingest.py. Re-run ingest locally after editing the
+# knowledge base and commit the result.
