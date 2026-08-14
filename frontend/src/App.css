@@ -37,3 +37,24 @@
   text-align: center;
   animation: message-in 320ms var(--ease) both;
 }
+
+.app-error-text {
+  margin: 0;
+}
+
+/* The chips are a way forward, not part of the warning, so they stay neutral. */
+.app-error .follow-ups {
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top-color: var(--color-danger);
+  text-align: left;
+}
+
+.app-error .follow-ups-label,
+.app-error .follow-up {
+  color: var(--color-text-muted);
+}
+
+.app-error .follow-ups-list {
+  justify-content: center;
+}

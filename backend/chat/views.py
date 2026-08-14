@@ -49,7 +49,7 @@ class AskLLM(APIView):
         except RateLimitError as exc:
             logger.warning('Groq rate limit reached: %s', exc)
             return Response(
-                {'error': rate_limit_message(exc)},
+                {'error': rate_limit_message(exc), 'follow_ups': follow_ups_for(question)},
                 status=status.HTTP_429_TOO_MANY_REQUESTS,
             )
 
@@ -88,12 +88,17 @@ class AskLLMStream(APIView):
                     yield f'data: {json.dumps({"token": token})}\n\n'
                 # After the answer, so the chips appear once it has finished.
                 yield f'data: {json.dumps({"follow_ups": follow_ups_for(question)})}\n\n'
+            # Errors carry the chips too. They are cached answers, so they work
+            # when nothing else does, and an error saying "try the suggestions
+            # below" needs there to be suggestions below.
             except RateLimitError as exc:
                 logger.warning('Groq rate limit reached: %s', exc)
-                yield f'data: {json.dumps({"error": rate_limit_message(exc)})}\n\n'
+                payload = {'error': rate_limit_message(exc), 'follow_ups': follow_ups_for(question)}
+                yield f'data: {json.dumps(payload)}\n\n'
             except Exception:
                 logger.exception('Streaming the answer failed')
-                yield f'data: {json.dumps({"error": GENERIC_ERROR})}\n\n'
+                payload = {'error': GENERIC_ERROR, 'follow_ups': follow_ups_for(question)}
+                yield f'data: {json.dumps(payload)}\n\n'
             yield f'data: {json.dumps({"done": True})}\n\n'
 
         response = StreamingHttpResponse(event_stream(), content_type='text/event-stream')

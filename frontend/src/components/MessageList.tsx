@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import './MessageList.css'
+import FollowUps from './FollowUps'
 import type { Message } from '../types/chat'
 
 interface MessageListProps {
@@ -87,34 +88,6 @@ function MessageList({
   )
 }
 
-interface FollowUpsProps {
-  questions: string[]
-  onSelect?: (question: string) => void
-}
-
-function FollowUps({ questions, onSelect }: FollowUpsProps) {
-  if (!onSelect) return null
-
-  return (
-    <div className="follow-ups">
-      <span className="follow-ups-label">Ask next</span>
-      <div className="follow-ups-list">
-        {questions.map((question) => (
-          <button
-            key={question}
-            type="button"
-            className="follow-up"
-            onClick={() => onSelect(question)}
-          >
-            {question}
-            <ArrowIcon />
-          </button>
-        ))}
-      </div>
-    </div>
-  )
-}
-
 interface MessageActionsProps {
   content: string
   onRegenerate?: () => void
@@ -185,20 +158,6 @@ function CheckIcon() {
         d="m2.5 7.5 3 3 6-7"
         stroke="currentColor"
         strokeWidth="1.6"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  )
-}
-
-function ArrowIcon() {
-  return (
-    <svg className="follow-up-arrow" width="13" height="13" viewBox="0 0 14 14" fill="none">
-      <path
-        d="M3 7h8M7.5 3.5 11 7l-3.5 3.5"
-        stroke="currentColor"
-        strokeWidth="1.4"
         strokeLinecap="round"
         strokeLinejoin="round"
       />

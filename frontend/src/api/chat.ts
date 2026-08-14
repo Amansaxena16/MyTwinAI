@@ -5,8 +5,16 @@ const API_BASE_URL = 'http://localhost:8000'
 /**
  * An error the backend wrote for the visitor to read, such as having run out
  * of daily tokens. Safe to show as-is, unlike a network or parsing failure.
+ * Carries the follow up questions, which are the way out of a rate limit.
  */
-export class ChatError extends Error {}
+export class ChatError extends Error {
+  followUps: string[]
+
+  constructor(message: string, followUps: string[] = []) {
+    super(message)
+    this.followUps = followUps
+  }
+}
 
 export interface AskResponse {
   answer: string
@@ -71,7 +79,7 @@ export async function streamQuestion(
       if (!line.startsWith('data:')) continue
 
       const payload = JSON.parse(line.slice('data:'.length).trim())
-      if (payload.error) throw new ChatError(payload.error)
+      if (payload.error) throw new ChatError(payload.error, payload.follow_ups ?? [])
       if (payload.done) return
       if (payload.token) onToken(payload.token)
       if (payload.follow_ups) onFollowUps?.(payload.follow_ups)

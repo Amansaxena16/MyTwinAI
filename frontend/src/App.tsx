@@ -3,6 +3,7 @@ import './App.css'
 import { ChatError, streamQuestion } from './api/chat'
 import ChatInput from './components/ChatInput'
 import EmptyState from './components/EmptyState'
+import FollowUps from './components/FollowUps'
 import MessageList from './components/MessageList'
 import Sidebar from './components/Sidebar'
 import type { HistoryEntry, Message } from './types/chat'
@@ -16,11 +17,14 @@ function App() {
   const [messages, setMessages] = useState<Message[]>([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  // Shown with the error, since a failed answer leaves no message to hang them on.
+  const [errorFollowUps, setErrorFollowUps] = useState<string[]>([])
 
   const handleNewChat = () => {
     setMessages([])
     setLoading(false)
     setError(null)
+    setErrorFollowUps([])
   }
 
   /**
@@ -29,6 +33,7 @@ function App() {
    */
   const sendQuestion = async (question: string, baseMessages: Message[]) => {
     setError(null)
+    setErrorFollowUps([])
     setLoading(true)
 
     const history: HistoryEntry[] = baseMessages.map(({ role, content }) => ({ role, content }))
@@ -63,11 +68,12 @@ function App() {
       )
     } catch (err) {
       console.error('Failed to get response', err)
-      setError(
-        err instanceof ChatError
-          ? err.message
-          : 'Something went wrong while getting a response. Please try again.',
-      )
+      if (err instanceof ChatError) {
+        setError(err.message)
+        setErrorFollowUps(err.followUps)
+      } else {
+        setError('Something went wrong while getting a response. Please try again.')
+      }
       // Drop the placeholder so an empty bubble is not left behind.
       if (!answer) {
         setMessages([...baseMessages, { role: 'user', content: question }])
@@ -104,7 +110,16 @@ function App() {
             />
           )}
         </div>
-        {error && <div className="app-error">{error}</div>}
+        {error && (
+          <div className="app-error">
+            <p className="app-error-text">{error}</p>
+            <FollowUps
+              questions={errorFollowUps}
+              onSelect={handleSend}
+              label="Try one of these"
+            />
+          </div>
+        )}
         <ChatInput onSend={handleSend} loading={loading} />
       </main>
     </div>
