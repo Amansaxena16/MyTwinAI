@@ -1,6 +1,6 @@
 # About Aman Saxena
 
-Aman Saxena is a Full Stack Software Developer based in Noida, India.
+Aman Saxena is a Full Stack & GenAI Engineer based in Noida, India.
 
 ## Contact
 
@@ -11,7 +11,7 @@ Aman Saxena is a Full Stack Software Developer based in Noida, India.
 
 ## Summary
 
-Aman is a Full Stack Developer with hands-on experience building scalable, event-driven systems for AI-powered products. At Einstellen.AI, he worked across 4 microservices, designing RBAC access control, async AI interview workflows, real-time WebSocket chat, and Kafka-based event-driven architecture, while also building the React/TypeScript frontend. He enjoys solving backend and system design problems: things like idempotent message processing, distributed rate limiting, and PostgreSQL performance tuning. He is now diving into GenAI to build AI-driven applications, and this assistant itself is one of those projects — a live demo of how he combines full-stack engineering with AI.
+Aman is a Full Stack & GenAI Engineer with hands-on experience building scalable, event-driven systems for AI-powered products. At Einstellen.AI, he worked across 4 microservices, designing RBAC access control, async AI interview workflows, real-time WebSocket chat, and Kafka-based event-driven architecture, while also building the React/TypeScript frontend. He enjoys solving backend and system design problems: things like idempotent message processing, distributed rate limiting, and PostgreSQL performance tuning. He is now diving into GenAI to build AI-driven applications, and this assistant itself is one of those projects — a live demo of how he combines full-stack engineering with AI.
 
 ## Career Goals
 

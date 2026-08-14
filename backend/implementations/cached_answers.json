@@ -1,7 +1,7 @@
 [
   {
     "question": "What are your key skills?",
-    "answer": "Aman is a Full Stack Developer whose strongest areas are backend and system design, with a growing focus on GenAI.\n\n- **Languages** — C, C++, Python, JavaScript, TypeScript\n- **Frameworks** — Django, FastAPI, Flask, React, Redux Toolkit, Tailwind CSS\n- **GenAI and ML** — LangChain, RAG, Chroma, HuggingFace Embeddings, Groq, Gradio, LLM-as-judge evaluation\n- **Databases** — PostgreSQL, SQL, materialized views, query optimisation, indexing\n- **Tools and platforms** — Git, GitHub, Postman, Linux, Celery, Kafka, Redis, WebSocket\n- **Soft skills** — effective communication, adaptability, quick learner, calm under pressure, self-motivated"
+    "answer": "Aman is a Full Stack & GenAI Engineer whose strongest areas are backend and system design.\n\n- **Languages** — C, C++, Python, JavaScript, TypeScript\n- **Frameworks** — Django, FastAPI, Flask, React, Redux Toolkit, Tailwind CSS\n- **GenAI and ML** — LangChain, RAG, Chroma, HuggingFace Embeddings, Groq, Gradio, LLM-as-judge evaluation\n- **Databases** — PostgreSQL, SQL, materialized views, query optimisation, indexing\n- **Tools and platforms** — Git, GitHub, Postman, Linux, Celery, Kafka, Redis, WebSocket\n- **Soft skills** — effective communication, adaptability, quick learner, calm under pressure, self-motivated"
   },
   {
     "question": "Tell me about your work experience.",
@@ -17,7 +17,7 @@
   },
   {
     "question": "Who is Aman Saxena?",
-    "answer": "Aman Saxena is a **Full Stack Software Developer** based in Noida, India.\n\nHe has hands-on experience building scalable, event-driven systems for AI-powered products, and enjoys solving backend and system design problems."
+    "answer": "Aman Saxena is a **Full Stack & GenAI Engineer** based in Noida, India.\n\nHe has hands-on experience building scalable, event-driven systems for AI-powered products, and enjoys solving backend and system design problems. He is now building GenAI applications — this assistant is one of them."
   },
   {
     "question": "How much total experience does Aman have?",

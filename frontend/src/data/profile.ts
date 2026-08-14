@@ -1,7 +1,7 @@
 export const profile = {
   name: 'Aman Saxena',
   initials: 'AS',
-  tagline: 'Full Stack Software Developer',
+  tagline: 'Full Stack & GenAI Engineer',
   location: 'Noida, India',
   links: [
     { label: 'GitHub', href: 'https://github.com/Amansaxena16', icon: 'github' },
