@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import './App.css'
-import { streamQuestion } from './api/chat'
+import { ChatError, streamQuestion } from './api/chat'
 import ChatInput from './components/ChatInput'
 import EmptyState from './components/EmptyState'
 import MessageList from './components/MessageList'
@@ -63,7 +63,11 @@ function App() {
       )
     } catch (err) {
       console.error('Failed to get response', err)
-      setError('Something went wrong while getting a response. Please try again.')
+      setError(
+        err instanceof ChatError
+          ? err.message
+          : 'Something went wrong while getting a response. Please try again.',
+      )
       // Drop the placeholder so an empty bubble is not left behind.
       if (!answer) {
         setMessages([...baseMessages, { role: 'user', content: question }])

@@ -2,6 +2,12 @@ import type { HistoryEntry, Source } from '../types/chat'
 
 const API_BASE_URL = 'http://localhost:8000'
 
+/**
+ * An error the backend wrote for the visitor to read, such as having run out
+ * of daily tokens. Safe to show as-is, unlike a network or parsing failure.
+ */
+export class ChatError extends Error {}
+
 export interface AskResponse {
   answer: string
   sources: Source[]
@@ -65,7 +71,7 @@ export async function streamQuestion(
       if (!line.startsWith('data:')) continue
 
       const payload = JSON.parse(line.slice('data:'.length).trim())
-      if (payload.error) throw new Error(payload.error)
+      if (payload.error) throw new ChatError(payload.error)
       if (payload.done) return
       if (payload.token) onToken(payload.token)
       if (payload.follow_ups) onFollowUps?.(payload.follow_ups)
