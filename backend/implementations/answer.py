@@ -31,8 +31,6 @@ CACHE_PATH = os.path.join(BASE_DIR, 'cached_answers.json')
 CACHE_HIT_THRESHOLD = 0.95
 
 model = 'llama-3.3-70b-versatile'
-# How many knowledge base files a single answer may draw on.
-MAX_SOURCE_FILES = 4
 embeddings = HuggingFaceEmbeddings(model_name='all-MiniLM-L6-v2')
 
 OFF_TOPIC_REPLY = (
@@ -146,15 +144,18 @@ def rank_source_files(question: str) -> list[str]:
 
 
 def fetch_context(question: str) -> list[Document]:
-    """Pick the most relevant files, then include every section of them.
+    """Send the whole knowledge base, most relevant file first.
 
-    Matching section by section is what lost half the answer before: asking
-    "what are your skills" only matched two of the six skill sections, so the
-    rest never reached the model. Files are small, so once one is a match its
-    whole content goes in.
+    The knowledge base is about 2,400 tokens in total, so dropping the least
+    relevant files saved under 1,000 tokens a question while occasionally
+    losing the one that mattered: "What projects have you built?" ranked
+    projects.md fifth of seven, and the answer came back saying his profile
+    does not cover any projects. Scores sit between 1.16 and 1.59 for every
+    file, which is too little separation to cut on. Ranking is kept only so
+    the closest material leads the context.
     """
     context = []
-    for doc_type in rank_source_files(question)[:MAX_SOURCE_FILES]:
+    for doc_type in rank_source_files(question):
         context.extend(CHUNKS_BY_DOC_TYPE.get(doc_type, []))
     return context
 

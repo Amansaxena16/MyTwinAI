@@ -1,22 +1,74 @@
 [
   {
     "question": "What are your key skills?",
-    "answer": "Aman's key skills include programming languages such as C, C++, Python, JavaScript, and TypeScript. He is also skilled in frameworks and libraries like React, Redux Toolkit, HTML, CSS, and Django. Additionally, Aman has experience with GenAI and machine learning tools, databases like PostgreSQL, and tools and platforms like Git, GitHub, and Linux. His soft skills include effective communication, adaptability, and being a quick learner."
+    "answer": "Aman's key skills include programming languages such as C, C++, Python, JavaScript, and TypeScript. He is also skilled in frameworks and libraries like React, Redux Toolkit, HTML, CSS, and Tailwind CSS. Additionally, Aman has experience with GenAI and machine learning tools, databases like PostgreSQL and SQL, and tools and platforms like Git, GitHub, and Linux. His soft skills include effective communication, adaptability, and being a quick learner."
   },
   {
     "question": "Tell me about your work experience.",
-    "answer": "Aman has around two years of hands-on work experience in total, which includes approximately one and a half years as a Full Stack Developer at Einstellen.AI from February to July 2025, followed by internships spanning six months across three different companies: Codezin Technology Solutions (August to November 2023), Smile IT Solutions (July to October 2022). At each role, Aman was responsible for various backend and frontend development tasks. For instance, at Einstellen.AI, he designed a feature-level access control system using Django microservices along with React/TypeScript on the front end. He also built asynchronous interview workflows utilizing Celery and REST APIs to enhance responsiveness under concurrent loads. Additionally, Aman contributed by building reusable UI components in TypeScript and React leveraging Redux Toolkit for state management across the frontend application at Codezin Technology Solutions as an intern. At Smile IT Solutions, he focused on creating dynamic web pages using HTML, CSS with Bootstrap and Material UI frameworks to ensure design consistency while adding minimal JavaScript logic for interactivity purposes."
+    "answer": "Aman has around 2 years of hands-on work experience. He worked as a full-time Full Stack Developer at Einstellen.AI for about 1.5 years, and he also completed two internships that lasted around 6 months in total. His experience includes roles at Einstellen.AI, Codezin Technology Solutions, and Smile IT Solutions, where he worked on various projects and technologies such as Django, React, TypeScript, and PostgreSQL."
   },
   {
     "question": "Why should we hire you?",
-    "answer": "I believe I am a strong fit for development roles due to my self-motivation and dedication towards work — traits that have helped me excel academically, which is also evident in the projects at Einstellen.AI where I've owned backend design across multiple microservices using Django and Kafka architecture while building real-time features with React/TypeScript frontend. My technical depth combined with adaptability makes a valuable addition to any team."
+    "answer": "Aman believes he's a strong fit for development roles because he's self-motivated and puts his full effort into whatever he's working on. He brings a mix of technical depth and adaptability to any team he joins, as seen in his experience at Einstellen.AI, where he owned backend design across multiple microservices and worked on various features, including access control, real-time features, and event-driven systems."
   },
   {
     "question": "What projects have you built?",
-    "answer": "- Owned backend design across multiple microservices for Einstellen.AI’s AI-driven hiring platform using Django and Redis with RBAC access control, asynchronous workflows via Celery/REST APIs, reusable UI components in TypeScript & React powered by Redux Toolkit (RTK).\n- Developed dynamic scalable web applications at Codezin Technology Solutions focusing on revamping interactive website features."
+    "answer": "Aman has built several projects, including:\n* Multi-Channel Notification Fan-Out System: an event-driven notification system that fans out a single business event to Email, SMS, and Push channels via Kafka topics and independent Celery workers.\n* RAG_Chat_App: a full-stack RAG (Retrieval-Augmented Generation) chatbot that answers company-specific questions using a custom knowledge base, with a Django REST backend and a React frontend.\n* MyTwinAI: an AI-powered personal portfolio assistant (this project) that answers questions about Aman's background, skills, and experience by retrieving from his own profile data."
   },
   {
     "question": "Who is Aman Saxena?",
-    "answer": "Aman Saxena is a Full Stack Software Developer based in Noida, India. He has hands-on experience building scalable, event-driven systems for AI-powered products and holds roles as both Frontend and Backend Engineer at Einstellen.AI where he worked on an AI-driven hiring platform using Django microservices architecture among other responsibilities like designing RBAC access control system across services, building asynchronous interview workflows with Celery for better performance under concurrent load etc. He also has experience as a Full Stack Developer Intern at Codezin Technology Solutions and Web Developer Intern at Smile IT Solutions where he worked on developing dynamic web applications using Django, HTML, JavaScript alongwith designing UI components focusing primarily on clean layouts with Bootstrap for speedy development while maintaining visual consistency across pages. Aman has a passion for solving backend and system design problems like idempotent message processing, distributed rate limiting etc., he is currently working as an intern at GenAI Learning Course – Udemy where his role involves building personal portfolio assistant using Django REST Framework along with React frontend which answers questions about Aman's background, skills, and experience by retrieving from his own profile data. He also has a certification in 'GenAI Learning Course - Udemy'."
+    "answer": "Aman Saxena is a Full Stack Software Developer based in Noida, India. He has hands-on experience building scalable, event-driven systems for AI-powered products, and enjoys solving backend and system design problems."
+  },
+  {
+    "question": "How much total experience does Aman have?",
+    "answer": "Aman has around 2 years of hands-on work experience in total. This is roughly 1.5 years as a full-time Full Stack Developer at Einstellen.AI, plus about 6 months across two internships."
+  },
+  {
+    "question": "What is his educational background?",
+    "answer": "Aman's educational background includes a Master of Computer Applications (MCA) from GL Bajaj Institute of Technology, AKTU University, a Bachelor of Computer Applications (BCA) from Institute of Management and Research, CCS University, as well as a Senior Secondary (12th) and High School (10th) education from International Centre English School and Shree Sanatan Dharm Education Centre, respectively. His scores are 75% for MCA, 65% for BCA, 63% for 12th, and 59% for 10th."
+  },
+  {
+    "question": "What programming languages does he know?",
+    "answer": "Aman knows the following programming languages: C, C++, Python, JavaScript, and TypeScript."
+  },
+  {
+    "question": "What AI and GenAI tools has he worked with?",
+    "answer": "Aman has worked with several GenAI and Machine Learning tools, including LangChain, RAG (Retrieval-Augmented Generation), Chroma (Vector Database), HuggingFace Embeddings, Groq (LLM Inference), Gradio, and LLM-as-judge Evaluation. He is also diving into GenAI to build AI-driven applications."
+  },
+  {
+    "question": "What databases has he worked with?",
+    "answer": "Aman has worked with PostgreSQL and SQL, including materialized views, query optimization, and indexing."
+  },
+  {
+    "question": "Where is he based?",
+    "answer": "Aman Saxena is based in Noida, India."
+  },
+  {
+    "question": "How can I contact him?",
+    "answer": "You can contact Aman Saxena through his email at aman16nov.as@gmail.com, or connect with him on LinkedIn at https://www.linkedin.com/in/aman-saxena-16nov/. He is also available on GitHub at https://github.com/Amansaxena16 and LeetCode at https://leetcode.com/u/Amansaxena16/."
+  },
+  {
+    "question": "What are his strengths?",
+    "answer": "Aman's key strengths are effective communication and staying calm under pressure, which help him handle challenges well. He is also a quick learner and adapts easily to new situations."
+  },
+  {
+    "question": "What are his weaknesses?",
+    "answer": "Aman's weaknesses include sometimes focusing too much on small details, which can delay his final decision-making. He is actively working on finding the right balance between thoroughness and speed."
+  },
+  {
+    "question": "Where does he see himself in 5 years?",
+    "answer": "Aman sees himself building management skills alongside his technical role in the next few years, so he can grow both as an engineer and as a leader."
+  },
+  {
+    "question": "Tell me about MyTwinAI.",
+    "answer": "MyTwinAI is an AI-powered personal portfolio assistant that Aman built to answer questions about his background, skills, and experience. It retrieves information from his own profile data, allowing recruiters or visitors to get accurate and specific answers about his experience. The project uses a similar RAG architecture to his RAG_Chat_App, but is applied to structured personal data instead of plain documents. The key features of MyTwinAI include a RAG pipeline and the ability to answer questions about experience, skills, projects, and FAQs that a recruiter would typically ask."
+  },
+  {
+    "question": "What certifications does he have?",
+    "answer": "Aman has a certification in the GenAI Learning Course from Udemy."
+  },
+  {
+    "question": "What are his achievements?",
+    "answer": "Aman has achieved a few notable things, including winning 1st position in a singing competition. He has also completed a GenAI Learning Course on Udemy. Additionally, his projects, such as the Multi-Channel Notification Fan-Out System and RAG_Chat_App, demonstrate his skills and accomplishments as a Full Stack Software Developer."
   }
 ]
