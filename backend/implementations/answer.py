@@ -14,7 +14,13 @@ from langchain_groq import ChatGroq
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_ollama import ChatOllama
 
-from .common_questions import COMMON_QUESTIONS, DEFAULT_FOLLOW_UPS, FOLLOW_UPS
+from .common_questions import (
+    COMMON_QUESTIONS,
+    DEFAULT_FOLLOW_UPS,
+    FOLLOW_UPS,
+    GREETING_ANSWER,
+    GREETINGS,
+)
 
 load_dotenv()
 
@@ -242,13 +248,14 @@ def load_answer_cache() -> dict[str, str]:
     suggestion chips - the questions most visitors actually click - send this
     text verbatim.
     """
-    if not os.path.exists(CACHE_PATH):
-        return {}
+    cache = {cache_key(greeting): GREETING_ANSWER for greeting in GREETINGS}
 
-    with open(CACHE_PATH, encoding='utf-8') as cache_file:
-        entries = json.load(cache_file)
+    if os.path.exists(CACHE_PATH):
+        with open(CACHE_PATH, encoding='utf-8') as cache_file:
+            for entry in json.load(cache_file):
+                cache[cache_key(entry['question'])] = entry['answer']
 
-    return {cache_key(entry['question']): entry['answer'] for entry in entries}
+    return cache
 
 
 CACHED_ANSWERS = load_answer_cache()

@@ -48,11 +48,15 @@ def load_existing() -> dict[str, str]:
 
 
 def save(answers: dict[str, str]) -> None:
-    entries = [
-        {'question': question, 'answer': answers[question]}
-        for question in COMMON_QUESTIONS
-        if question in answers
-    ]
+    """Write every answer, in a stable order, keeping hand written ones.
+
+    The cache holds more than COMMON_QUESTIONS: the greetings are written by
+    hand and never generated. Listing only the common questions here would
+    quietly delete them on the next run.
+    """
+    extras = [question for question in answers if question not in COMMON_QUESTIONS]
+    ordered = extras + [question for question in COMMON_QUESTIONS if question in answers]
+    entries = [{'question': question, 'answer': answers[question]} for question in ordered]
     with open(CACHE_PATH, 'w', encoding='utf-8') as cache_file:
         json.dump(entries, cache_file, indent=2, ensure_ascii=False)
 

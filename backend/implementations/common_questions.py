@@ -134,3 +134,29 @@ DEFAULT_FOLLOW_UPS = [
     'What projects have you built?',
     'Tell me about your work experience.',
 ]
+
+# Almost every visitor opens with a greeting, and sending one to the model cost
+# about 2,800 tokens to say hello back. Written here rather than in
+# cached_answers.json because it is interface copy, not a generated answer, and
+# because one paragraph serves every phrasing. Kept out of COMMON_QUESTIONS so
+# "hi" is never offered as a follow up chip.
+GREETING_ANSWER = (
+    "**Hi! I'm MyTwinAI — Aman's digital twin.**\n\n"
+    'I answer questions about his skills, experience, projects and education, '
+    "straight from his own profile.\n\n"
+    'Pick a question below, or ask me anything about him.'
+)
+
+GREETINGS = [
+    'Hi, who are you?',
+    'who are you?',
+    'hi',
+    'hii',
+    'hi there',
+    'hello',
+    'hello there',
+    'hey',
+    'hey there',
+    'good morning',
+    'good evening',
+]
