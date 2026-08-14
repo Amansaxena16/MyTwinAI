@@ -18,6 +18,14 @@ load_dotenv()
 
 # 'groq' for the deployed app, 'ollama' to test locally without spending tokens.
 LLM_PROVIDER = os.getenv('llm_provider', 'groq').lower()
+
+# Both Groq models are free; the free allowance is what differs. 70b answers
+# better but stops after 100,000 tokens a day, which is about 34 typed
+# questions. 8b is a little weaker and allows 14x the daily requests. Changing
+# this does not make a question cheaper - the prompt and knowledge base are
+# most of it either way - it changes how many questions a day fit.
+GROQ_MODEL = os.getenv('groq_model', 'llama-3.3-70b-versatile')
+
 OLLAMA_MODEL = os.getenv('ollama_model', 'phi3')
 OLLAMA_BASE_URL = os.getenv('ollama_base_url', 'http://localhost:11434')
 
@@ -25,7 +33,6 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DB_NAME = os.path.join(BASE_DIR, 'vector_db')
 CACHE_PATH = os.path.join(BASE_DIR, 'cached_answers.json')
 
-model = 'llama-3.3-70b-versatile'
 embeddings = HuggingFaceEmbeddings(model_name='all-MiniLM-L6-v2')
 
 OFF_TOPIC_REPLY = (
@@ -99,7 +106,7 @@ def build_llm():
     api_key = os.getenv('groq_api_key')
     if not api_key:
         raise ValueError('Could not find Groq API Key')
-    return ChatGroq(temperature=0, model_name=model, groq_api_key=api_key)
+    return ChatGroq(temperature=0, model_name=GROQ_MODEL, groq_api_key=api_key)
 
 
 llm = build_llm()
