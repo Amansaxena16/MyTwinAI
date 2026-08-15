@@ -1,6 +1,8 @@
 import type { HistoryEntry, Source } from '../types/chat'
 
-const API_BASE_URL = 'http://localhost:8000'
+// Set VITE_API_BASE_URL in Vercel to the Hugging Face Space URL. Falls back to
+// the local backend so nothing needs configuring during development.
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:8000'
 
 /**
  * An error the backend wrote for the visitor to read, such as having run out

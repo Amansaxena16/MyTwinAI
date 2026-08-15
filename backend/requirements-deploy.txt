@@ -1,0 +1,29 @@
+# What the server actually needs, as opposed to requirements.txt, which is the
+# full local environment including 2.7 GB of NVIDIA CUDA drivers that a CPU-only
+# host can never use. Nothing is removed from the app - these are the same
+# libraries, minus the GPU build of torch and the packages nothing imports.
+#
+# torch comes from the CPU index below: about 200 MB instead of 1.1 GB plus
+# 2.7 GB of drivers.
+--extra-index-url https://download.pytorch.org/whl/cpu
+
+django==6.1
+djangorestframework==3.18.0
+django-cors-headers==4.9.0
+gunicorn==23.0.0
+python-dotenv==1.2.2
+
+langchain==1.3.15
+langchain-core==1.5.4
+langchain-chroma==1.1.0
+langchain-groq==1.1.3
+langchain-huggingface==1.2.2
+langchain-ollama==1.1.0
+langchain-text-splitters==1.1.2
+chromadb==1.5.9
+groq==0.37.1
+
+sentence-transformers==5.7.0
+transformers==5.15.0
+torch==2.13.0
+numpy==2.5.2

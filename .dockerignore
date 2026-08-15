@@ -1,0 +1,8 @@
+.venv/
+.git/
+.env
+frontend/
+**/__pycache__/
+**/*.pyc
+backend/db.sqlite3
+backend/requirements.txt

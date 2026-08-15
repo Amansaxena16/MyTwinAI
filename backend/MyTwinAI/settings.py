@@ -10,22 +10,37 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/6.1/ref/settings/
 """
 
+import os
 from pathlib import Path
+
+from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+load_dotenv(BASE_DIR.parent / '.env')
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/6.1/howto/deployment/checklist/
+
+def env_list(name: str) -> list[str]:
+    """A comma separated environment variable, e.g. "a.com, b.com"."""
+    return [item.strip() for item in os.getenv(name, '').split(',') if item.strip()]
+
+
+# The defaults are the development ones, so nothing needs setting locally.
+# Every one of them is overridden by an environment variable in production.
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-wo1wf6h_izxl6q-(0p7^h^3^6e4vt1ibp7!$2xx5t9fmgh8&4e'
+SECRET_KEY = os.getenv(
+    'django_secret_key',
+    'django-insecure-wo1wf6h_izxl6q-(0p7^h^3^6e4vt1ibp7!$2xx5t9fmgh8&4e',
+)
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv('django_debug', 'true').lower() == 'true'
 
-ALLOWED_HOSTS = []
+# Hugging Face terminates TLS in front of the app and forwards the real host,
+# so the host header cannot be pinned to one name.
+ALLOWED_HOSTS = env_list('django_allowed_hosts') or ['*']
 
 
 # Application definition
@@ -53,9 +68,16 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-CORS_ALLOWED_ORIGINS = [
+# The frontend is on a different domain to the API, so it has to be named here
+# or the browser blocks every request. Set cors_allowed_origins to the Vercel
+# URL in production, e.g. "https://mytwinai.vercel.app".
+CORS_ALLOWED_ORIGINS = env_list('cors_allowed_origins') or [
     'http://localhost:5173',
 ]
+
+# Vercel gives every deployment its own preview URL, which cannot be listed one
+# by one. Set cors_allow_all to true only if you want those to work too.
+CORS_ALLOW_ALL_ORIGINS = os.getenv('cors_allow_all', 'false').lower() == 'true'
 
 ROOT_URLCONF = 'MyTwinAI.urls'
 
