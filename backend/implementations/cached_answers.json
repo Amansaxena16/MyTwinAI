@@ -1,7 +1,7 @@
 [
   {
     "question": "What are your key skills?",
-    "answer": "Aman is a Full Stack & GenAI Engineer whose strongest areas are backend and system design.\n\n- **Languages** — C, C++, Python, JavaScript, TypeScript\n- **Frameworks** — Django, FastAPI, Flask, React, Redux Toolkit, Tailwind CSS\n- **GenAI and ML** — LangChain, RAG, Chroma, HuggingFace Embeddings, Groq, Gradio, LLM-as-judge evaluation\n- **Databases** — PostgreSQL, SQL, materialized views, query optimisation, indexing\n- **Tools and platforms** — Git, GitHub, Postman, Linux, Celery, Kafka, Redis, WebSocket\n- **Soft skills** — effective communication, adaptability, quick learner, calm under pressure, self-motivated"
+    "answer": "Aman is a Full Stack & GenAI Engineer whose strongest areas are backend and system design.\n\n- **Languages** — C, C++, Python, JavaScript, TypeScript\n- **Frameworks** — Django, FastAPI, Flask, React, Redux Toolkit, Tailwind CSS\n- **GenAI and ML** — LangChain, RAG, Chroma, sentence embeddings (all-MiniLM-L6-v2), ONNX Runtime, Groq, Gradio, prompt engineering, LLM-as-judge evaluation\n- **Databases** — PostgreSQL, SQL, materialized views, query optimisation, indexing\n- **Deployment and DevOps** — Docker, Gunicorn, Render, Vercel, environment-based config, CI/CD from GitHub\n- **Tools and platforms** — Git, GitHub, Docker, Postman, Linux, Celery, Kafka, Redis, WebSocket\n- **Soft skills** — effective communication, adaptability, quick learner, calm under pressure, self-motivated"
   },
   {
     "question": "Tell me about your work experience.",
@@ -13,7 +13,7 @@
   },
   {
     "question": "What projects have you built?",
-    "answer": "Aman has built three main projects:\n\n- **[Multi-Channel Notification Fan-Out System](https://github.com/Amansaxena16/Notification-System)** — an event-driven system that fans one business event out to Email, SMS and Push through Kafka topics and independent Celery workers, so one channel failing does not block the rest.\n- **[RAG_Chat_App](https://github.com/Amansaxena16/RAG_Chat_App)** — a full-stack RAG chatbot answering company-specific questions from a custom knowledge base, with a Django REST backend, a React frontend and a 30-question evaluation set.\n- **[MyTwinAI](https://github.com/Amansaxena16/MyTwinAI)** — this project. An AI portfolio assistant that answers questions about his background from his own profile data."
+    "answer": "Aman has built three main projects:\n\n- **[Multi-Channel Notification Fan-Out System](https://github.com/Amansaxena16/Notification-System)** — an event-driven system that fans one business event out to Email, SMS and Push through Kafka topics and independent Celery workers, so one channel failing does not block the rest.\n- **[RAG_Chat_App](https://github.com/Amansaxena16/RAG_Chat_App)** — a full-stack RAG chatbot answering company-specific questions from a custom knowledge base, with a Django REST backend, a React frontend and a 30-question evaluation set.\n- **[MyTwinAI](https://github.com/Amansaxena16/MyTwinAI)** — this project. An AI portfolio assistant answering questions from his own profile, built with Django and React, Dockerised, and deployed with the backend on Render and the frontend on Vercel. [Live here](https://my-twin-ai-one.vercel.app)."
   },
   {
     "question": "Who is Aman Saxena?",

@@ -38,12 +38,22 @@ An AI-powered personal portfolio assistant (this project) that answers questions
 
 Problem solved: Lets recruiters or visitors get accurate, specific answers about his experience instead of reading through a static resume.
 
-Tech stack: Django, Django REST Framework, React, Chroma, HuggingFace Embeddings, Groq
+Tech stack: Django, Django REST Framework, React, TypeScript, Chroma, ONNX Runtime, Groq, Docker, Render, Vercel
 
-Aman's role: Solo builder — designing and building the full stack, reusing and adapting the RAG architecture from RAG_Chat_App.
+Aman's role: Solo builder — designing, building and deploying the full stack, reusing and adapting the RAG architecture from RAG_Chat_App.
 
 Key features:
 - RAG pipeline over structured personal/profile data instead of plain documents.
 - Answers questions about experience, skills, projects, and FAQs a recruiter would typically ask.
+- Answers stream back token by token over Server-Sent Events, and three relevant follow-up questions are suggested after each reply.
+- The most common questions are served from a pre-written cache, so they cost no LLM tokens and return in milliseconds rather than seconds.
+- Falls back to a second LLM automatically when the first model's daily token limit runs out, so the app degrades instead of failing.
+- Dockerised and deployed with the backend on Render and the frontend on Vercel.
+
+Engineering notes:
+- Replaced PyTorch with ONNX Runtime for the embedding model, which produced identical vectors while cutting memory from about 500 MB to 300 MB and the image from 1.89 GB to 799 MB, letting it run on a free 512 MB host.
+- Loads the embedding model in a background thread at startup so no visitor waits for it, and the frontend retries automatically while a sleeping free instance wakes up.
 
 GitHub: https://github.com/Amansaxena16/MyTwinAI
+
+Live: https://my-twin-ai-one.vercel.app
