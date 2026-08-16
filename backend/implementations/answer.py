@@ -2,8 +2,11 @@ import json
 import logging
 import os
 import re
+import threading
+import time
 from collections import defaultdict
 from collections.abc import Iterator
+from typing import NamedTuple
 
 from dotenv import load_dotenv
 from groq import RateLimitError
@@ -53,8 +56,6 @@ OLLAMA_BASE_URL = os.getenv('ollama_base_url', 'http://localhost:11434')
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DB_NAME = os.path.join(BASE_DIR, 'vector_db')
 CACHE_PATH = os.path.join(BASE_DIR, 'cached_answers.json')
-
-embeddings = HuggingFaceEmbeddings(model_name='all-MiniLM-L6-v2')
 
 OFF_TOPIC_REPLY = (
     "I can only answer questions about Aman Saxena - his background, skills, "
@@ -130,9 +131,6 @@ directly if you would like to know more.
 {context}
 """
 
-vectorstore = Chroma(embedding_function=embeddings, persist_directory=DB_NAME)
-
-
 def build_llm(groq_model: str = ''):
     """Groq in production, Ollama for local testing so no tokens are spent."""
     if LLM_PROVIDER == 'ollama':
@@ -176,19 +174,50 @@ def model_name_of(model) -> str:
     return getattr(model, 'model_name', None) or getattr(model, 'model', '?')
 
 
-def load_chunks_by_doc_type() -> dict[str, list[Document]]:
-    """Every stored chunk, grouped by the file it came from."""
-    stored = vectorstore.get()
+class Retrieval(NamedTuple):
+    """Everything needed to find context for a question."""
+
+    vectorstore: Chroma
+    chunks_by_doc_type: dict[str, list[Document]]
+    total_chunks: int
+
+
+def load_retrieval() -> Retrieval:
+    """Load the embedding model, the vector store and every stored chunk.
+
+    Costs about 16 seconds and 400 MB, nearly all of it PyTorch.
+    """
+    embeddings = HuggingFaceEmbeddings(model_name='all-MiniLM-L6-v2')
+    store = Chroma(embedding_function=embeddings, persist_directory=DB_NAME)
+
+    stored = store.get()
     grouped: dict[str, list[Document]] = defaultdict(list)
     for metadata, content in zip(stored['metadatas'], stored['documents']):
         grouped[metadata.get('doc_type')].append(
             Document(page_content=content, metadata=metadata)
         )
-    return grouped
+
+    return Retrieval(store, grouped, max(1, sum(len(chunks) for chunks in grouped.values())))
 
 
-CHUNKS_BY_DOC_TYPE = load_chunks_by_doc_type()
-TOTAL_CHUNKS = max(1, sum(len(chunks) for chunks in CHUNKS_BY_DOC_TYPE.values()))
+# Loaded on first use rather than on import, because a cached answer never needs
+# it: lookup_cached_answer runs before any retrieval. Django imports this module
+# while serving its first request, so building this eagerly made the first
+# visitor wait 16 seconds even to be greeted from a file. The lock matters -
+# gunicorn serves on several threads, and loading twice would mean 800 MB.
+_retrieval: Retrieval | None = None
+_retrieval_lock = threading.Lock()
+
+
+def retrieval() -> Retrieval:
+    global _retrieval
+    with _retrieval_lock:
+        if _retrieval is None:
+            logger.info('loading the embedding model and vector store')
+            started = time.monotonic()
+            _retrieval = load_retrieval()
+            logger.info('retrieval ready in %.1fs', time.monotonic() - started)
+    return _retrieval
 
 
 def rank_source_files(question: str) -> list[str]:
@@ -198,7 +227,8 @@ def rank_source_files(question: str) -> list[str]:
     Chroma cannot keep inside 0-1 for this collection and which made LangChain
     print a warning containing every chunk on every single question.
     """
-    scored = vectorstore.similarity_search_with_score(question, k=TOTAL_CHUNKS)
+    store = retrieval()
+    scored = store.vectorstore.similarity_search_with_score(question, k=store.total_chunks)
 
     closest: dict[str, float] = {}
     for doc, distance in scored:
@@ -220,9 +250,10 @@ def fetch_context(question: str) -> list[Document]:
     file, which is too little separation to cut on. Ranking is kept only so
     the closest material leads the context.
     """
+    chunks_by_doc_type = retrieval().chunks_by_doc_type
     context = []
     for doc_type in rank_source_files(question):
-        context.extend(CHUNKS_BY_DOC_TYPE.get(doc_type, []))
+        context.extend(chunks_by_doc_type.get(doc_type, []))
     return context
 
 
