@@ -1,10 +1,14 @@
 # MyTwinAI
 
+### ▶ [Try it live](https://my-twin-ai-one.vercel.app)
+
 A chatbot that answers recruiters' questions about me — using **my real profile**, not an AI's guesswork.
 
 Ask it *"what projects has he built?"* and it answers from my actual files. Ask it *"write me a Python script"* and it politely refuses. It only knows one subject: me.
 
-**Built with:** Django · React · LangChain · Chroma · Groq
+**Built with:** Django · React · LangChain · Chroma · Groq · Docker
+
+*First question after a quiet spell may take a few seconds — the free server goes to sleep, and the app waits for it rather than showing you an error.*
 
 ---
 
@@ -144,6 +148,69 @@ I sized it by measuring, not guessing. My longest genuine answer needs 567 token
 
 ---
 
+## The last problem: it was too big to host for free
+
+The app worked. Nowhere free would run it.
+
+Every host with real Docker support wanted a credit card. Free tiers cap at **512 MB of memory**, and mine needed about 500 MB — right on the line, with no room to spare.
+
+I measured where it was going:
+
+```
+PyTorch and its dependencies   ~400 MB
+everything else                ~100 MB
+```
+
+**All that PyTorch existed to run one small model** — the thing that turns text into numbers so I can search my profile.
+
+That same model also ships in **ONNX** format, which needs no PyTorch at all. And it was already installed, as a dependency of a library I was using anyway.
+
+Before switching, I checked it actually gave the same answers:
+
+```
+cosine similarity between the two versions:  1.0000000000
+largest difference in any number:            0.00000014
+```
+
+Identical, down to floating-point rounding. Same model, lighter engine.
+
+| | Before | After |
+| --- | --- | --- |
+| Memory | 519 MB | **303 MB** |
+| Docker image | 1.89 GB | **799 MB** |
+| Time to load the model | 11.6s | **0.9s** |
+
+It fits comfortably now — and as a bonus, the 0.9-second load killed the cold-start delay too.
+
+**The lesson:** the heaviest dependency was doing the smallest job. Worth checking before paying for a bigger server.
+
+---
+
+## Where it runs
+
+| | |
+| --- | --- |
+| **Frontend** | Vercel — [my-twin-ai-one.vercel.app](https://my-twin-ai-one.vercel.app) |
+| **Backend** | Render (free tier), Docker |
+| **Cost** | £0 |
+
+Both redeploy automatically when I push to `main`.
+
+The backend needs these environment variables:
+
+```
+groq_api_key           your Groq key
+django_secret_key      any long random string
+django_debug           false
+cors_allowed_origins   https://your-frontend-domain
+```
+
+That last one matters: without it any website could embed the bot and spend my daily AI tokens.
+
+**Free hosting has one catch.** The server sleeps after 15 minutes of no visitors, and takes a moment to wake. So the frontend retries quietly and says *"waking the server up"* instead of showing an error — a recruiter sees a short wait, not a broken page.
+
+---
+
 ## Running it locally
 
 ```bash
@@ -177,10 +244,23 @@ If your change affects one of the saved answers in
 `backend/implementations/cached_answers.json`, **edit that too** — saved answers
 are served without asking the AI, so they don't update themselves.
 
+I have been caught by this: I updated my skills, rebuilt the index, and the site
+still showed the old list, because the two most-clicked questions were being
+answered from the cache and never reached the AI at all.
+
+Then push, and both hosts redeploy on their own:
+
+```bash
+git add -A && git commit -m "update my profile" && git push
+```
+
+The search index is committed to the repo, so the server never has to build it.
+
 ---
 
 ## What I'd do next
 
+- Make it work properly on phones — it is built for a desktop screen right now
 - Let visitors ask in other languages
 - Track which questions get asked most, and pre-write those answers too
 - A short evaluation set to catch wrong answers automatically before they go live
