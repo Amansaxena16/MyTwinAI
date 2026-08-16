@@ -34,10 +34,14 @@ EXPOSE 7860
 # second would double the memory for no extra throughput. Threads handle the
 # concurrency instead, which suits an app that spends its time waiting on Groq.
 # Streamed answers are long lived, hence the raised timeout.
-CMD ["gunicorn", "MyTwinAI.wsgi:application", \
-     "--bind", "0.0.0.0:7860", \
-     "--worker-class", "gthread", \
-     "--workers", "1", \
-     "--threads", "8", \
-     "--timeout", "300", \
-     "--access-logfile", "-"]
+# Hosts differ on which port they route to: Render and Cloud Run set PORT, while
+# Hugging Face expects 7860. Binding to $PORT with 7860 as the fallback lets the
+# same image run on any of them. exec so gunicorn replaces the shell and still
+# receives the host's shutdown signal.
+CMD ["sh", "-c", "exec gunicorn MyTwinAI.wsgi:application \
+     --bind 0.0.0.0:${PORT:-7860} \
+     --worker-class gthread \
+     --workers 1 \
+     --threads 8 \
+     --timeout 300 \
+     --access-logfile -"]
