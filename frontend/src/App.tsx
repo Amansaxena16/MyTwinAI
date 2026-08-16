@@ -13,18 +13,25 @@ import type { HistoryEntry, Message } from './types/chat'
 // the conversation is on tracks.
 const MAX_ANSWERS_WITH_FOLLOW_UPS = 5
 
+// The free host parks the server when nobody has visited for a while, and the
+// first question has to wait for it to start again. Saying so beats a silent
+// pause that reads as broken.
+const WAKING_NOTE = 'Waking the server up — this can take up to a minute on the first question.'
+
 function App() {
   const [messages, setMessages] = useState<Message[]>([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   // Shown with the error, since a failed answer leaves no message to hang them on.
   const [errorFollowUps, setErrorFollowUps] = useState<string[]>([])
+  const [waking, setWaking] = useState(false)
 
   const handleNewChat = () => {
     setMessages([])
     setLoading(false)
     setError(null)
     setErrorFollowUps([])
+    setWaking(false)
   }
 
   /**
@@ -34,6 +41,7 @@ function App() {
   const sendQuestion = async (question: string, baseMessages: Message[]) => {
     setError(null)
     setErrorFollowUps([])
+    setWaking(false)
     setLoading(true)
 
     const history: HistoryEntry[] = baseMessages.map(({ role, content }) => ({ role, content }))
@@ -50,6 +58,8 @@ function App() {
         question,
         history,
         (token) => {
+          // The server answered, so whatever wait there was is over.
+          setWaking(false)
           answer += token
           setMessages((prev) => {
             const next = [...prev]
@@ -65,6 +75,7 @@ function App() {
             return next
           })
         },
+        () => setWaking(true),
       )
     } catch (err) {
       console.error('Failed to get response', err)
@@ -80,6 +91,7 @@ function App() {
       }
     } finally {
       setLoading(false)
+      setWaking(false)
     }
   }
 
@@ -105,6 +117,7 @@ function App() {
             <MessageList
               messages={messages}
               loading={loading}
+              waitingNote={waking ? WAKING_NOTE : undefined}
               onRegenerate={handleRegenerate}
               onSuggestionClick={handleSend}
             />

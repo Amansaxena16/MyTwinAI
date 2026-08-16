@@ -113,6 +113,13 @@
   height: 28px;
 }
 
+/* Sits under the typing dots when the wait is longer than a normal answer. */
+.waiting-note {
+  margin: 6px 0 0;
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+}
+
 .typing-indicator span {
   width: 7px;
   height: 7px;

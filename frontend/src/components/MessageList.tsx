@@ -8,6 +8,8 @@ import type { Message } from '../types/chat'
 interface MessageListProps {
   messages: Message[]
   loading?: boolean
+  /** Explains an unusually long wait, such as the server starting back up. */
+  waitingNote?: string
   onRegenerate?: () => void
   onSuggestionClick?: (question: string) => void
 }
@@ -15,6 +17,7 @@ interface MessageListProps {
 function MessageList({
   messages,
   loading = false,
+  waitingNote,
   onRegenerate,
   onSuggestionClick,
 }: MessageListProps) {
@@ -47,6 +50,7 @@ function MessageList({
                   <span />
                   <span />
                 </div>
+                {waitingNote && <p className="waiting-note">{waitingNote}</p>}
               </div>
             )
           }
