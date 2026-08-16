@@ -170,7 +170,7 @@ After editing one, rebuild the search index:
 
 ```bash
 cd backend
-python implementations/ingest.py
+python -m implementations.ingest
 ```
 
 If your change affects one of the saved answers in

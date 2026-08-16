@@ -9,8 +9,7 @@ RUN useradd -m -u 1000 user
 ENV HOME=/home/user \
     PATH=/home/user/.local/bin:$PATH \
     PYTHONUNBUFFERED=1 \
-    PYTHONDONTWRITEBYTECODE=1 \
-    HF_HOME=/home/user/.cache/huggingface
+    PYTHONDONTWRITEBYTECODE=1
 
 WORKDIR /app
 
@@ -18,11 +17,12 @@ COPY --chown=user backend/requirements-deploy.txt .
 RUN pip install --no-cache-dir -r requirements-deploy.txt
 
 # Bake the embedding model into the image. Without this the first visitor after
-# every restart waits while 90 MB downloads, and a Space with no network egress
-# at runtime would fail outright.
+# every restart waits while 80 MB downloads, and a host with no network egress
+# at runtime would fail outright. Embedding once also unpacks the archive, so
+# the running container only ever loads an already extracted model.
 RUN python -c "\
-from sentence_transformers import SentenceTransformer; \
-SentenceTransformer('sentence-transformers/all-MiniLM-L6-v2')" \
+from chromadb.utils.embedding_functions import ONNXMiniLM_L6_V2; \
+ONNXMiniLM_L6_V2()(['warm the cache'])" \
     && chown -R user:user /home/user/.cache
 
 COPY --chown=user backend/ /app/

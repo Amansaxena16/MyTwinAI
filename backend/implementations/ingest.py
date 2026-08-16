@@ -3,8 +3,9 @@ import os
 
 from langchain_chroma import Chroma
 from langchain_community.document_loaders import TextLoader
-from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_text_splitters import MarkdownHeaderTextSplitter, RecursiveCharacterTextSplitter
+
+from .embeddings import MiniLMEmbeddings
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 KNOWLEDGE_BASE_DIR = os.path.join(os.path.dirname(BASE_DIR), 'knowledge_base')
@@ -72,7 +73,7 @@ def create_embeddings(chunks):
     return vectorstore
 
 
-embeddings = HuggingFaceEmbeddings(model_name='all-MiniLM-L6-v2')
+embeddings = MiniLMEmbeddings()
 
 if __name__ == '__main__':
     documents = fetch_documents()

@@ -14,7 +14,6 @@ from langchain_chroma import Chroma
 from langchain_core.documents import Document
 from langchain_core.messages import BaseMessage, HumanMessage, SystemMessage, convert_to_messages
 from langchain_groq import ChatGroq
-from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_ollama import ChatOllama
 
 from .common_questions import (
@@ -24,6 +23,7 @@ from .common_questions import (
     GREETING_ANSWER,
     GREETINGS,
 )
+from .embeddings import MiniLMEmbeddings
 
 load_dotenv()
 
@@ -183,12 +183,8 @@ class Retrieval(NamedTuple):
 
 
 def load_retrieval() -> Retrieval:
-    """Load the embedding model, the vector store and every stored chunk.
-
-    Costs about 16 seconds and 400 MB, nearly all of it PyTorch.
-    """
-    embeddings = HuggingFaceEmbeddings(model_name='all-MiniLM-L6-v2')
-    store = Chroma(embedding_function=embeddings, persist_directory=DB_NAME)
+    """Load the embedding model, the vector store and every stored chunk."""
+    store = Chroma(embedding_function=MiniLMEmbeddings(), persist_directory=DB_NAME)
 
     stored = store.get()
     grouped: dict[str, list[Document]] = defaultdict(list)
@@ -203,8 +199,9 @@ def load_retrieval() -> Retrieval:
 # Loaded on first use rather than on import, because a cached answer never needs
 # it: lookup_cached_answer runs before any retrieval. Django imports this module
 # while serving its first request, so building this eagerly made the first
-# visitor wait 16 seconds even to be greeted from a file. The lock matters -
-# gunicorn serves on several threads, and loading twice would mean 800 MB.
+# visitor wait even to be greeted from a file. The lock matters - gunicorn
+# serves on several threads, and loading twice would double the memory for
+# nothing.
 _retrieval: Retrieval | None = None
 _retrieval_lock = threading.Lock()
 
