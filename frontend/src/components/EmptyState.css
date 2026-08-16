@@ -79,3 +79,24 @@
 .suggestion-chip:active {
   transform: translateY(0);
 }
+
+@media (max-width: 768px) {
+  .empty-state {
+    padding: 0 16px;
+  }
+
+  .empty-state-title {
+    font-size: 30px;
+  }
+
+  .empty-state-subtitle {
+    font-size: 15px;
+    margin-bottom: 22px;
+  }
+
+  /* The glow is sized for a desktop canvas and overflows a phone. */
+  .empty-state::before {
+    width: 280px;
+    top: -80px;
+  }
+}

@@ -249,3 +249,29 @@
   border: none;
   border-top: 1px solid var(--color-border);
 }
+
+@media (max-width: 768px) {
+  .message-list {
+    padding: 18px 14px 4px;
+  }
+
+  .message-list-inner {
+    gap: 22px;
+  }
+
+  /* A phone has no room to waste on the gutter beside a message. */
+  .message-bubble {
+    max-width: 88%;
+    padding: 10px 14px;
+  }
+
+  /* There is no hover on a touch screen, so Copy and Retry would never appear.
+     They stay visible instead of being unreachable. */
+  .message-actions {
+    opacity: 1;
+  }
+
+  .waiting-note {
+    font-size: 0.8rem;
+  }
+}

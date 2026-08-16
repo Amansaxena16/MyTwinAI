@@ -19,12 +19,16 @@ function Sidebar({ onNewChat }: SidebarProps) {
         <span className="profile-avatar" aria-hidden="true">
           {profile.initials}
         </span>
-        <p className="profile-name">{profile.name}</p>
-        <p className="profile-tagline">{profile.tagline}</p>
-        <p className="profile-location">
-          <PinIcon />
-          {profile.location}
-        </p>
+        {/* A wrapper only so the card can turn into a row on a phone. It is
+            display:contents on desktop, so the layout there is unchanged. */}
+        <div className="profile-identity">
+          <p className="profile-name">{profile.name}</p>
+          <p className="profile-tagline">{profile.tagline}</p>
+          <p className="profile-location">
+            <PinIcon />
+            {profile.location}
+          </p>
+        </div>
 
         <div className="profile-links">
           {profile.links.map((link) => (

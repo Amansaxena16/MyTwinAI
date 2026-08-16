@@ -89,6 +89,12 @@
   box-shadow: var(--shadow-accent);
 }
 
+/* Transparent on desktop: name, tagline and location stay direct children of
+   the card, so the column layout above is untouched. */
+.profile-identity {
+  display: contents;
+}
+
 .profile-name {
   margin: 12px 0 2px;
   font-family: var(--font-heading);
@@ -158,4 +164,112 @@
   font-size: 12px;
   line-height: 1.5;
   color: var(--color-text-subtle);
+}
+
+/* --- Phones ---------------------------------------------------------------
+   260px of sidebar leaves almost nothing for the chat on a 400px screen, so
+   below this width the sidebar becomes a single compact bar across the top:
+   the new-chat logo, who this is, and the links out. The location line and the
+   footer note are dropped rather than shrunk - the empty state already says
+   the answers come from Aman's profile. */
+@media (max-width: 768px) {
+  .sidebar {
+    width: 100%;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 10px;
+    border-right: none;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .sidebar-brand {
+    width: auto;
+    flex-shrink: 0;
+    margin: 0;
+    padding: 5px;
+  }
+
+  /* The wordmark is repeated by the empty state, and the width is worth more. */
+  .sidebar-title {
+    display: none;
+  }
+
+  .profile-card {
+    flex: 1;
+    min-width: 0;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    margin: 0;
+    padding: 5px 10px;
+    border-radius: 10px;
+    text-align: left;
+  }
+
+  .profile-identity {
+    display: block;
+    min-width: 0;
+  }
+
+  .profile-avatar {
+    width: 34px;
+    height: 34px;
+    flex-shrink: 0;
+    font-size: 13px;
+  }
+
+  /* Long names and taglines truncate instead of wrapping the bar to two lines. */
+  .profile-name,
+  .profile-tagline {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  .profile-name {
+    margin: 0;
+    font-size: 14px;
+  }
+
+  .profile-tagline {
+    font-size: 11.5px;
+    line-height: 1.3;
+  }
+
+  .profile-location,
+  .sidebar-spacer,
+  .sidebar-footer {
+    display: none;
+  }
+
+  .profile-links {
+    width: auto;
+    flex-shrink: 0;
+    gap: 6px;
+    margin-top: 0;
+    padding-top: 0;
+    border-top: none;
+  }
+
+  .profile-link {
+    width: 30px;
+    height: 30px;
+  }
+}
+
+/* Narrow phones: the tagline is the first thing worth losing. */
+@media (max-width: 400px) {
+  .profile-tagline {
+    display: none;
+  }
+
+  .profile-links {
+    gap: 4px;
+  }
+
+  .profile-link {
+    width: 28px;
+    height: 28px;
+  }
 }

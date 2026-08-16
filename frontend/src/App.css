@@ -58,3 +58,19 @@
 .app-error .follow-ups-list {
   justify-content: center;
 }
+
+/* --- Phones ---------------------------------------------------------------
+   The sidebar becomes a top bar (see Sidebar.css), so the shell stacks. dvh
+   rather than % because mobile browsers count their own address bar in the
+   viewport, which otherwise pushes the input off the bottom of the screen. */
+@media (max-width: 768px) {
+  .app {
+    flex-direction: column;
+    height: 100dvh;
+  }
+
+  .app-error {
+    padding: 10px 12px;
+    font-size: 14px;
+  }
+}
