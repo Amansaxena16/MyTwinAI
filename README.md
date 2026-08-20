@@ -122,11 +122,15 @@ Now "hi", "hello", "hey" and eight other greetings are answered instantly from t
 I use a big model for quality and a smaller one for capacity:
 
 ```
-llama-3.3-70b   ->  used first. better answers, runs out sooner
-llama-3.1-8b    ->  takes over automatically when the first is empty
+gpt-oss-120b   ->  used first. better answers, runs out sooner
+gpt-oss-20b    ->  takes over automatically when the first is empty
 ```
 
 When the good model runs out, the app **quietly steps down** instead of breaking. The visitor never knows.
+
+**This is also where it bit me.** The app first ran on `llama-3.3-70b` with `llama-3.1-8b` behind it. Groq retired *both* on the same day, so the fallback was already dead when the main model went — and the whole point of having two was lost. A fallback only helps if it can fail for a different reason than the thing it is backing up.
+
+The saved answers carried the site through it. Clicking the suggested questions still worked, because those never reach the AI at all.
 
 And if both run out, the error is honest and useful:
 

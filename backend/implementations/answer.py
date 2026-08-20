@@ -32,14 +32,25 @@ logger = logging.getLogger(__name__)
 # 'groq' for the deployed app, 'ollama' to test locally without spending tokens.
 LLM_PROVIDER = os.getenv('llm_provider', 'groq').lower()
 
-# Both Groq models are free; the free allowance is what differs. 70b answers
-# better but stops after 100,000 tokens a day, which is about 34 typed
-# questions. 8b is a little weaker and allows far more. Rather than choosing,
-# the good model runs until its allowance is gone and the roomy one takes over,
-# so the site degrades in quality instead of breaking. Set the fallback empty
-# to turn this off.
-GROQ_MODEL = os.getenv('groq_model', 'llama-3.3-70b-versatile')
-GROQ_FALLBACK_MODEL = os.getenv('groq_fallback_model', 'llama-3.1-8b-instant')
+# Both Groq models are free; the free allowance is what differs. 120b answers
+# better but runs out of its daily allowance sooner. 20b is a little weaker and
+# allows far more. Rather than choosing, the good model runs until its allowance
+# is gone and the roomy one takes over, so the site degrades in quality instead
+# of breaking. Set the fallback empty to turn this off.
+#
+# These replaced llama-3.3-70b-versatile and llama-3.1-8b-instant, which Groq
+# decommissioned on 16 August 2026. Both went on the same day, so the fallback
+# was dead too and every uncached question failed. Not qwen3.6-27b, Groq's other
+# suggestion: it writes its thinking into the answer itself, so a visitor would
+# read "<think>Here is a thinking process..." on the page.
+GROQ_MODEL = os.getenv('groq_model', 'openai/gpt-oss-120b')
+GROQ_FALLBACK_MODEL = os.getenv('groq_fallback_model', 'openai/gpt-oss-20b')
+
+# These models think before they answer, and the thinking is spent out of
+# MAX_ANSWER_TOKENS - one test burned 300 of the 600 before writing a word, so a
+# long answer would be cut off mid sentence. On 'low' the same question used 11.
+# Set it empty for a model that has no thinking step at all.
+GROQ_REASONING_EFFORT = os.getenv('groq_reasoning_effort', 'low')
 
 # A hard ceiling on the answer, enforced by the provider rather than asked for
 # in the prompt. "Keep it short" is only advice, and the model talks itself out
@@ -144,11 +155,13 @@ def build_llm(groq_model: str = ''):
     api_key = os.getenv('groq_api_key')
     if not api_key:
         raise ValueError('Could not find Groq API Key')
+    thinking = {'reasoning_effort': GROQ_REASONING_EFFORT} if GROQ_REASONING_EFFORT else {}
     return ChatGroq(
         temperature=0,
         model_name=groq_model or GROQ_MODEL,
         groq_api_key=api_key,
         max_tokens=MAX_ANSWER_TOKENS,
+        **thinking,
     )
 
 
